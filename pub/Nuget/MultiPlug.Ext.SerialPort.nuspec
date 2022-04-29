@@ -1,0 +1,30 @@
+﻿<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>MultiPlug.Ext.SerialPort</id>
+    <version>1.0.0</version>
+    <title>Serial Port Extension for the MultiPlug .Net Edge Computing Platform</title>
+    <authors>MultiPlugHub</authors>
+    <owners>MultiPlugHub</owners>
+    <projectUrl>https://github.com/multiplug-hub/MultiPlug.Ext.SerialPort</projectUrl>
+    <icon>images\multiplugico.png</icon>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Use Serial Ports with this MultiPlug Extension</description>
+	<license type="expression">MIT</license>
+    <releaseNotes>
+	1.0.0 Stub</releaseNotes>
+    <copyright>MultiPlug Community</copyright>
+    <tags>MultiPlug Edge_Computing Edge IoT</tags>
+    <dependencies>
+      <group targetFramework=".NETFramework4.7.2">
+        <dependency id="MultiPlug.Base" version="1.0.69" />
+        <dependency id="MultiPlug.Extension.Core" version="1.0.63" />
+        <dependency id="MultiPlug.Core" version="2.2.79" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="images\multiplugico.png" target="images\" />
+    <file src="..\..\src\MultiPlug.Ext.SerialPort\bin\Release\MultiPlug.Ext.SerialPort.dll" target="lib\net472" />
+  </files>
+</package>
