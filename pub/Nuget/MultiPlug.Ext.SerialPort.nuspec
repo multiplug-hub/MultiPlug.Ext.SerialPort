@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>MultiPlug.Ext.SerialPort</id>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <title>Serial Port Extension for the MultiPlug .Net Edge Computing Platform</title>
     <authors>MultiPlugHub</authors>
     <owners>MultiPlugHub</owners>
@@ -12,7 +12,7 @@
     <description>Use Serial Ports with this MultiPlug Extension</description>
 	<license type="expression">MIT</license>
     <releaseNotes>
-	1.0.0 Stub</releaseNotes>
+	1.0.1 First Release</releaseNotes>
     <copyright>MultiPlug Community</copyright>
     <tags>MultiPlug Edge_Computing Edge IoT</tags>
     <dependencies>

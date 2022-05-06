@@ -1,0 +1,137 @@
+﻿@model MultiPlug.Base.Http.EdgeApp
+
+@functions{
+
+    string IsSerialPortOpen(bool theValue)
+    {
+        return (theValue) ? "<i class=\"icon-ok\"></i>" : "<i class=\"icon-remove\"></i>";
+    }
+}
+<form action="" method="post" accept-charset="utf-8" enctype="application/x-www-form-urlencoded" autocomplete="off">
+    <section class="row-fluid">
+
+        <div class="row-fluid">
+            <div class="box">
+                <div class="span2">
+                    <span style="display: inline-block; height:100%; vertical-align:middle; margin: 7px 0px 7px 0px ">
+                        <img alt="Serial Port Icon" src="@Raw(Model.Context.Paths.Assets)images/serialport.png">
+                    </span>
+                </div>
+                <div class="span8">
+                    <p style="font-size:26px; line-height: 54px; text-align: center; margin: 0px;">Serial Ports</p>
+                </div>
+                <div class="span2" style="text-align: right;">
+                    <button type="submit" value="submit" style="height:54px; width:65px" class="item btn btn-green"><i class="icon-save icon-large"></i><p>Save</p></button>
+                </div>
+            </div>
+        </div>
+
+        @Include("MultiPlug.Ext.SerialPort.SerialPort_Settings_Navigation")
+
+        <div class="row-fluid">
+            <h3 class="box-header">Serial Ports</h3>
+
+            <div class="box non-collapsible">
+
+                <table id="SerialPortsTable" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="span3">Name</th>
+                            <th class="span2">Baud Rate</th>
+                            <th class="span3">Event Id</th>
+                            <th class="span1">Subscribers</th>
+                            <th class="span1">Connected</th>
+                            <th class="span2"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Extension.Model.Guids.Length; i++)
+                        {
+                            var Guid = Model.Extension.Model.Guids[i];
+                            var PortName = Model.Extension.Model.PortNames[i];
+                            var BaudRate = Model.Extension.Model.BaudRates[i];
+                            var ReadEventId = Model.Extension.Model.ReadEventIds[i];
+                            var WriteSubscriptionsCount = Model.Extension.Model.WriteSubscriptionsCounts[i];
+                            var Opened = Model.Extension.Model.Openeds[i];
+                            <tr>
+                                <td class="span3"><a href="@Raw(Model.Context.Paths.Home)serialport/?id=@Guid">@PortName</a></td>
+                                <td class="span2"><a href="@Raw(Model.Context.Paths.Home)serialport/?id=@Guid">@BaudRate</a></td>
+                                <td class="span3"><a href="@Raw(Model.Context.Paths.Home)serialport/?id=@Guid">@ReadEventId</a></td>
+                                <td class="span1"><a href="@Raw(Model.Context.Paths.Home)serialport/?id=@Guid">@WriteSubscriptionsCount</a></td>
+                                <td class="span1"><a href="@Raw(Model.Context.Paths.Home)serialport/?id=@Guid">@Raw(IsSerialPortOpen(Opened))</a></td>
+                                <td class="span2">
+                                    <div class="btn-group">
+                                        <a class="btn btn-blue" href="@Raw(Model.Context.Paths.Home)serialport/?id=@Guid"><i class="icon-edit"></i></a>
+                                        <a class="btn btn-red btn-deleteserialport" value="@Guid" href="@Raw(Model.Context.Paths.Home)serialport/delete/?id=@Guid"><i class="icon-trash"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+
+                        <tr>
+                            <td class="span3"></td>
+                            <td class="span2"></td>
+                            <td class="span3"></td>
+                            <td class="span1"></td>
+                            <td class="span1"></td>
+                            <td class="span2"><button type="button" class="btn btn-green" id="btn-newserialport"><i class="icon-plus"></i></button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        $("#btn-newserialport").click(function () {
+            $('#SerialPortsTable tr:last').before(NewSerialPort());
+
+            $(".btn-deleteserialporttemp").click(function (event) {
+                event.preventDefault();
+                $(this).closest("tr").remove();
+            });
+        });
+
+        $(".btn-deleteserialport").click(function (event) {
+            event.preventDefault();
+
+            var theRow = $(this).closest("tr");
+
+            $.post($(this).attr('href'), function (data) {
+
+            })
+            .done(function () {
+                theRow.remove();
+            });
+        });
+
+        function NewSerialPort() {
+            return '<tr>\
+                    <td class="span3">\
+                        <select class="input-block-level" name="PortNames">\
+                    @foreach (var PortName in @Model.Extension.Model.AvailablePortNames)
+                    {
+                            @:<option value="@(Raw(PortName))">@(Raw(PortName))</option>\
+                    }
+                            </select>\
+                        </td>\
+                        <td class="span2">\
+                            <select class="input-block-level" name="BaudRates">\
+                            @foreach (var BaudRate in @Model.Extension.Model.AvailableBaudRates)
+                    {
+                        @:<option value="@(Raw(BaudRate))">@(Raw(BaudRate))</option>\
+                                                                        }
+                            </select>\
+                        </td>\
+                        <td class="span3">-</td>\
+                        <td class="span1">0</td>\
+                        <td class="span1"><i class=\"icon-remove\"></i></td>\
+                    <td class="span2">\
+                        <div class="btn-group">\
+                            <a class="btn btn-red btn-deleteserialporttemp" value="" href=""><i class="icon-trash"></i></a>\
+                        </div>\
+                    </td>\
+                </tr>'
+        }
+    </script>
+</form>

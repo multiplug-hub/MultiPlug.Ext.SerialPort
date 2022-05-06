@@ -41,6 +41,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -49,13 +51,59 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\SerialPort\SerialPortComponent.cs" />
+    <Compile Include="Components\Utils\SerialPort.cs" />
+    <Compile Include="Controllers\Assets\AssetsEndpoint.cs" />
+    <Compile Include="Controllers\Assets\ImageController.cs" />
+    <Compile Include="Controllers\Settings\About\AboutController.cs" />
+    <Compile Include="Controllers\Settings\Home\HomeController.cs" />
+    <Compile Include="Controllers\Settings\SerialPort\SerialPortController.cs" />
+    <Compile Include="Controllers\Settings\SerialPort\SerialPortDeleteController.cs" />
+    <Compile Include="Controllers\Settings\SerialPort\SerialPortDeleteSubscriptionController.cs" />
+    <Compile Include="Controllers\Settings\SettingsApp.cs" />
+    <None Include="Controllers\Settings\Status\Status.cshtml" />
+    <Compile Include="Controllers\Settings\Status\StatusController.cs" />
+    <Compile Include="Controllers\Templates.cs" />
+    <Compile Include="Core.cs" />
+    <Compile Include="Diagnostics\EventLogDefinitions.cs" />
+    <Compile Include="Diagnostics\EventLogEntryCodes.cs" />
+    <Compile Include="Models\Components\SerialPort\SerialPortProperties.cs" />
+    <Compile Include="Models\Load\LoadRoot.cs" />
+    <Compile Include="Models\Settings\About\AboutModel.cs" />
+    <Compile Include="Models\Settings\Home\HomeModel.cs" />
+    <Compile Include="Models\Settings\SerialPort\SerialPortModel.cs" />
+    <Compile Include="Models\Settings\Status\StatusModel.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="SerialPort.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Controllers\Settings\About\About.cshtml" />
+    <None Include="Controllers\Settings\Home\Home.cshtml" />
+    <None Include="Controllers\Settings\SerialPort\SerialPort.cshtml" />
+    <None Include="Controllers\Settings\Shared\SettingsSerialPortNavigation.cshtml" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Controllers\Assets\SerialPort.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy "$(ProjectDir)bin\$(ConfigurationName)\MultiPlug.Ext.SerialPort.dll" "C:\projects\i4Core\Connector\MultiPlug.CLI\bin\Debug\extensions\MultiPlug.Ext.SerialPort" /Y /I</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

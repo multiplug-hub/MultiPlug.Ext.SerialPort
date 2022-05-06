@@ -1,0 +1,39 @@
+﻿@model MultiPlug.Base.Http.EdgeApp
+@functions {
+    public string NavLocationIsHome()
+    {
+        return Model.Context.Paths.Current == Model.Context.Paths.Home ? "active" : string.Empty;
+    }
+
+    public string NavLocationIsSerialPort()
+    {
+        return Model.Context.Paths.Current == Model.Context.Paths.Home + "serialport/" ? "active" : string.Empty;
+    }
+
+    public string NavLocationIsStatus()
+    {
+        return Model.Context.Paths.Current == Model.Context.Paths.Home + "status/" ? "active" : string.Empty;
+    }
+
+    public string NavLocationIsAbout()
+    {
+        return Model.Context.Paths.Current == Model.Context.Paths.Home + "about/" ? "active" : string.Empty;
+    }
+}
+
+<div class="row-fluid">
+    <ul class="nav nav-tabs">
+        <li class="@NavLocationIsHome()"><a href="@Raw(Model.Context.Paths.Home)">Home</a></li>
+
+        @if (!string.IsNullOrEmpty(Model.Extension.Model.Guid))
+        {
+            <li class="@NavLocationIsSerialPort()"><a href="@Raw(Model.Context.Paths.Home)serialport/?id=@Model.Extension.Model.Guid">Setup</a></li>
+            <li class="@NavLocationIsStatus()"><a href="@Raw(Model.Context.Paths.Home)status/?id=@Model.Extension.Model.Guid">Status</a></li>
+            <li class="@NavLocationIsAbout()"><a href="@Raw(Model.Context.Paths.Home)about/?id=@Model.Extension.Model.Guid">About</a></li>
+        }
+        else
+        {
+            <li class="@NavLocationIsAbout()"><a href="@Raw(Model.Context.Paths.Home)about/">About</a></li>
+        }
+    </ul>
+</div>
