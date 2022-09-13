@@ -94,6 +94,14 @@ namespace MultiPlug.Ext.SerialPort
             }
         }
 
+        internal void Shutdown()
+        {
+            foreach (SerialPortComponent SerialPort in SerialPorts)
+            {
+                SerialPort.Close();
+            }
+        }
+
         internal bool Remove(SerialPortProperties theSerialPorts)
         {
             var SerialPortSearch = Instance.SerialPorts.FirstOrDefault(Lane => Lane.Guid == theSerialPorts.Guid);

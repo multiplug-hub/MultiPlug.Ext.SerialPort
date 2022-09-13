@@ -69,5 +69,10 @@ namespace MultiPlug.Ext.SerialPort
                 return Core.Instance.Events;
             }
         }
+
+        public override void Shutdown()
+        {
+            Core.Instance.Shutdown();
+        }
     }
 }
