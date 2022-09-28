@@ -451,11 +451,6 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
 
                 ReadEvent.Invoke(new Payload(ReadEvent.Id, new PayloadSubject[] { new PayloadSubject(ReadEvent.Subjects[0], Read) }));
             }
-
-            if (m_SerialPort.BytesToRead > 0 && ( ! ReadCancellationToken.IsCancellationRequested ) )
-            {
-                ReadLoop(ReadCancellationToken);
-            }
         }
     }
 }
