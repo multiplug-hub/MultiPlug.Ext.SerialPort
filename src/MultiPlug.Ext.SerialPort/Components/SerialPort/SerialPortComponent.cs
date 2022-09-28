@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using System.IO.Ports;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using MultiPlug.Base.Exchange;
 using MultiPlug.Base.Exchange.API;
 using MultiPlug.Ext.SerialPort.Diagnostics;
+using MultiPlug.Ext.SerialPort.Components.Utils;
 using MultiPlug.Ext.SerialPort.Models.Components.SerialPort;
 using DotNetSerialPort = System.IO.Ports.SerialPort;
 
@@ -32,6 +33,18 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
         public SerialPortComponent(string theGuid, ILoggingService theLoggingService)
         {
             Guid = theGuid;
+            LoggingLevel = 0;
+            LoggingShowControlCharacters = false;
+            BaudRate = 0;
+            Parity = 0;
+            DataBits = 0;
+            StopBits = 0;
+            ReadTimeout = 0;
+            WriteTimeout = 0;
+            ReadStrategy = 0;
+            ReadTrim = false;
+            Enabled = false;
+
             m_LoggingService = theLoggingService;
             m_SerialPort = new DotNetSerialPort();
             // We don't use DataReceived as it's not supported by Mono
@@ -47,81 +60,97 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
             bool FlagEventUpdated = false;
             bool FlagBeginConnect = false;
 
-            if(theNewProperties.LoggingLevel != -1) // Flag for Don't Change
+            if(theNewProperties.LoggingLevel != null && theNewProperties.LoggingLevel != LoggingLevel)
             {
                 LoggingLevel = theNewProperties.LoggingLevel;
             }
 
-            if(PortName != theNewProperties.PortName)
+            if(theNewProperties.LoggingShowControlCharacters != null && theNewProperties.LoggingShowControlCharacters != LoggingShowControlCharacters)
+            {
+                LoggingShowControlCharacters = theNewProperties.LoggingShowControlCharacters;
+            }
+
+            if (theNewProperties.PortName != null && PortName != theNewProperties.PortName)
             {
                 PortName = theNewProperties.PortName;
                 FlagBeginConnect = true;
             }
 
-            if(BaudRate != theNewProperties.BaudRate )
+            if(theNewProperties.BaudRate != null && BaudRate != theNewProperties.BaudRate )
             {
                 BaudRate = theNewProperties.BaudRate;
                 FlagBeginConnect = true;
             }
 
-            if(Parity != theNewProperties.Parity)
+            if(theNewProperties.Parity != null && Parity != theNewProperties.Parity)
             {
                 Parity = theNewProperties.Parity;
                 FlagBeginConnect = true;
             }
 
-            if (DataBits != theNewProperties.DataBits)
+            if (theNewProperties.DataBits != null && DataBits != theNewProperties.DataBits)
             {
                 DataBits = theNewProperties.DataBits;
                 FlagBeginConnect = true;
             }
 
-            if (StopBits != theNewProperties.StopBits)
+            if (theNewProperties.StopBits != null && StopBits != theNewProperties.StopBits)
             {
                 StopBits = theNewProperties.StopBits;
                 FlagBeginConnect = true;
             }
 
-            if( ReadTo != theNewProperties.ReadTo )
+            if(theNewProperties.ReadTo != null && ReadTo != theNewProperties.ReadTo )
             {
                 ReadTo = theNewProperties.ReadTo;
                 m_ReadTo = ReadTo != null ? Regex.Unescape(ReadTo) : string.Empty;
                 FlagBeginConnect = true;
             }
 
-            if(ReadTimeout != theNewProperties.ReadTimeout)
+            if(theNewProperties.ReadTimeout != null && ReadTimeout != theNewProperties.ReadTimeout)
             {
                 ReadTimeout = theNewProperties.ReadTimeout;
                 FlagBeginConnect = true;
             }
 
-            if(WriteTimeout != theNewProperties.WriteTimeout)
+            if(theNewProperties.WriteTimeout != null && WriteTimeout != theNewProperties.WriteTimeout)
             {
                 WriteTimeout = theNewProperties.WriteTimeout;
                 FlagBeginConnect = true;
             }
 
-            if(ReadStrategy != theNewProperties.ReadStrategy)
+            if(theNewProperties.ReadStrategy != null && ReadStrategy != theNewProperties.ReadStrategy)
             {
                 ReadStrategy = theNewProperties.ReadStrategy;
                 FlagBeginConnect = true;
             }
 
-            if(WritePrefix != theNewProperties.WritePrefix)
+            if(theNewProperties.WritePrefix != null && WritePrefix != theNewProperties.WritePrefix)
             {
                 WritePrefix = theNewProperties.WritePrefix;
                 m_WritePrefix = WritePrefix != null ? Regex.Unescape(WritePrefix) : string.Empty;
             }
 
-            if(WriteAppend != theNewProperties.WriteAppend)
+            if(theNewProperties.WriteAppend != null && WriteAppend != theNewProperties.WriteAppend)
             {
                 WriteAppend = theNewProperties.WriteAppend;
                 m_WriteAppend = WriteAppend != null ? Regex.Unescape(WriteAppend) : string.Empty;
             }
 
-            ReadTrim = theNewProperties.ReadTrim;
-            ReadPrefix = theNewProperties.ReadPrefix;
-            ReadAppend = theNewProperties.ReadAppend;
+            if (theNewProperties.ReadTrim != null && ReadTrim != theNewProperties.ReadTrim)
+            {
+                ReadTrim = theNewProperties.ReadTrim;
+            }
+
+            if (theNewProperties.ReadPrefix != null && ReadPrefix != theNewProperties.ReadPrefix)
+            {
+                ReadPrefix = theNewProperties.ReadPrefix;
+            }
+
+            if (theNewProperties.ReadAppend != null && ReadAppend != theNewProperties.ReadAppend)
+            {
+                ReadAppend = theNewProperties.ReadAppend;
+            }
 
             if ( theNewProperties.ReadEvent != null)
             {
@@ -134,11 +163,11 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
             }
 
             // Keep this last
-            if (Enabled != theNewProperties.Enabled)
+            if (theNewProperties.Enabled != null && Enabled != theNewProperties.Enabled)
             {
                 Enabled = theNewProperties.Enabled;
 
-                if (Enabled)
+                if (Enabled.Value)
                 {
                     FlagBeginConnect = true;
                 }
@@ -151,14 +180,10 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
             if (FlagSubscriptionUpdated) { SubscriptionsUpdated?.Invoke(); }
             if (FlagEventUpdated) { EventsUpdated?.Invoke(); }
 
-            if(Enabled && FlagBeginConnect)
+            if(Enabled.Value && FlagBeginConnect)
             {
                 Open();
             }
-        }
-        internal void UpdateProperties(int theLoggingLevel)
-        {
-            LoggingLevel = theLoggingLevel;
         }
 
         internal string GetTraceLog()
@@ -236,7 +261,7 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
             try
             {
                 m_SerialPort.PortName = PortName;
-                m_SerialPort.BaudRate = BaudRate;
+                m_SerialPort.BaudRate = BaudRate.Value;
 
                 switch(Parity)
                 {
@@ -286,8 +311,8 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
                         break;
                 }
 
-                m_SerialPort.WriteTimeout = WriteTimeout == 0 ? DotNetSerialPort.InfiniteTimeout : WriteTimeout;
-                m_SerialPort.ReadTimeout = ReadTimeout == 0 ? DotNetSerialPort.InfiniteTimeout : ReadTimeout;
+                m_SerialPort.WriteTimeout = WriteTimeout.Value == 0 ? DotNetSerialPort.InfiniteTimeout : WriteTimeout.Value;
+                m_SerialPort.ReadTimeout = ReadTimeout.Value == 0 ? DotNetSerialPort.InfiniteTimeout : ReadTimeout.Value;
                 m_SerialPort.Open();
                 Opened = m_SerialPort.IsOpen;
 
@@ -425,7 +450,7 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
 
             if ( ! string.IsNullOrEmpty(Read))
             {
-                if(ReadTrim)
+                if(ReadTrim.Value)
                 {
                     Read = Read.Trim();
                 }
@@ -446,7 +471,28 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
                 }
                 else if (LoggingLevel == 2)
                 {
-                    m_LoggingService.WriteEntry((uint)EventLogEntryCodes.DataRead, new string[] { Read });
+                    if(LoggingShowControlCharacters.Value == true)
+                    {
+                        StringBuilder SB = new StringBuilder();
+
+                        foreach (char aChar in Read)
+                        {
+                            if (char.IsControl(aChar))
+                            {
+                                SB.AppendFormat(ControlCharacters.Lookup(Convert.ToUInt32(aChar)));
+                            }
+                            else
+                            {
+                                SB.Append(aChar);
+                            }
+                        }
+
+                        m_LoggingService.WriteEntry((uint)EventLogEntryCodes.DataRead, new string[] { SB.ToString() });
+                    }
+                    else
+                    {
+                        m_LoggingService.WriteEntry((uint)EventLogEntryCodes.DataRead, new string[] { Read });
+                    }
                 }
 
                 ReadEvent.Invoke(new Payload(ReadEvent.Id, new PayloadSubject[] { new PayloadSubject(ReadEvent.Subjects[0], Read) }));

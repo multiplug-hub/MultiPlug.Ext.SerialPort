@@ -4,6 +4,7 @@ using MultiPlug.Base.Attribute;
 using MultiPlug.Base.Http;
 using MultiPlug.Ext.SerialPort.Components.SerialPort;
 using MultiPlug.Ext.SerialPort.Models.Settings.Status;
+using MultiPlug.Ext.SerialPort.Models.Components.SerialPort;
 
 namespace MultiPlug.Ext.SerialPort.Controllers.Settings.Status
 {
@@ -33,7 +34,8 @@ namespace MultiPlug.Ext.SerialPort.Controllers.Settings.Status
                     Model = new StatusModel
                     {
                         Guid = SerialPortSearch.Guid,
-                        LoggingLevel = SerialPortSearch.LoggingLevel,
+                        LoggingLevel = SerialPortSearch.LoggingLevel.Value,
+                        LoggingShowControlCharacters = SerialPortSearch.LoggingShowControlCharacters.Value,
                         Log = SerialPortSearch.GetTraceLog()
                     },
                     Subscriptions = new Subscription[]
@@ -47,17 +49,15 @@ namespace MultiPlug.Ext.SerialPort.Controllers.Settings.Status
 
         public Response Post(StatusModel theModel)
         {
-            var SerialPortsSearch = Core.Instance.SerialPorts.FirstOrDefault(Lane => Lane.Guid == theModel.Guid);
-
-            if (SerialPortsSearch == null)
+            Core.Instance.Update(new SerialPortProperties[]
             {
-                return new Response
+                new SerialPortProperties
                 {
-                    StatusCode = System.Net.HttpStatusCode.NotFound
-                };
-            }
-
-            SerialPortsSearch.UpdateProperties(theModel.LoggingLevel);
+                    Guid = theModel.Guid,
+                    LoggingLevel = theModel.LoggingLevel,
+                    LoggingShowControlCharacters = theModel.LoggingShowControlCharacters
+                }
+            });
 
             return new Response
             {

@@ -17,7 +17,7 @@ namespace MultiPlug.Ext.SerialPort.Controllers.Settings.Home
                 {
                     Guids = Core.Instance.SerialPorts.Select( x => x.Guid).ToArray(),
                     PortNames = Core.Instance.SerialPorts.Select(x => x.PortName).ToArray(),
-                    BaudRates = Core.Instance.SerialPorts.Select(x => x.BaudRate).ToArray(),
+                    BaudRates = Core.Instance.SerialPorts.Select(x => x.BaudRate.Value).ToArray(),
                     ReadEventIds = Core.Instance.SerialPorts.Select(x => x.ReadEvent.Id).ToArray(),
                     WriteSubscriptionsCounts = Core.Instance.SerialPorts.Select(x => x.WriteSubscriptions.Length).ToArray(),
                     Openeds = Core.Instance.SerialPorts.Select(x => x.Opened).ToArray(),

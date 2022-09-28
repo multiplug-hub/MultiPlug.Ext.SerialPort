@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components\SerialPort\SerialPortComponent.cs" />
+    <Compile Include="Components\Utils\ControlCharacters .cs" />
     <Compile Include="Components\Utils\SerialPort.cs" />
     <Compile Include="Controllers\Assets\AssetsEndpoint.cs" />
     <Compile Include="Controllers\Assets\ImageController.cs" />

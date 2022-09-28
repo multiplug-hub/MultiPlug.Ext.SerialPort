@@ -6,5 +6,6 @@ namespace MultiPlug.Ext.SerialPort.Models.Settings.Status
         public string Guid { get; internal set; }
         public string Log { get; internal set; }
         public int LoggingLevel { get; internal set; }
+        public bool LoggingShowControlCharacters { get; internal set; }
     }
 }

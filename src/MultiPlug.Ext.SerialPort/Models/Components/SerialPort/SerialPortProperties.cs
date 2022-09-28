@@ -10,7 +10,10 @@ namespace MultiPlug.Ext.SerialPort.Models.Components.SerialPort
         public string Guid { get; set; }
 
         [DataMember]
-        public int LoggingLevel { get; set; }
+        public int? LoggingLevel { get; set; }
+
+        [DataMember]
+        public bool? LoggingShowControlCharacters { get; set; }
 
         [DataMember]
         public Event ReadEvent { get; set; }
@@ -22,40 +25,40 @@ namespace MultiPlug.Ext.SerialPort.Models.Components.SerialPort
         public string PortName { get; set; }
 
         [DataMember]
-        public int BaudRate { get; set; }
+        public int? BaudRate { get; set; }
 
         [DataMember]
-        public int Parity { get; set; }
+        public int? Parity { get; set; }
 
         [DataMember]
-        public int DataBits { get; set; }
+        public int? DataBits { get; set; }
 
         [DataMember]
-        public int StopBits { get; set; }
+        public int? StopBits { get; set; }
 
         [DataMember]
-        public int WriteTimeout { get; set; }
+        public int? WriteTimeout { get; set; }
 
         [DataMember]
-        public int ReadTimeout { get; set; }
+        public int? ReadTimeout { get; set; }
 
         /// <summary>
         /// 0 = ReadExisting, 1 = ReadTo
         /// </summary>
         [DataMember]
-        public int ReadStrategy { get; set; }
+        public int? ReadStrategy { get; set; }
 
         [DataMember]
         public string ReadTo { get; set; }
         [DataMember]
-        public bool ReadTrim { get; set; }
+        public bool? ReadTrim { get; set; }
         [DataMember]
         public string ReadPrefix { get; set; }
         [DataMember]
         public string ReadAppend { get; set; }
 
         [DataMember]
-        public bool Enabled { get; set; }
+        public bool? Enabled { get; set; }
         public bool Opened { get; set; }
 
         [DataMember]
