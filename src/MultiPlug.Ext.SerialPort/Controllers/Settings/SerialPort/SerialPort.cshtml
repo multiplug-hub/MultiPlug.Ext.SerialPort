@@ -68,6 +68,10 @@
                         <div class="row-fluid">
                             <div class="span12">
                                 <select name="PortName" class="input-block-level">
+                                    @if ( Array.IndexOf(Model.Extension.Model.AvailablePortNames, Model.Extension.Model.PortName) == -1)
+                                    {
+                                        <option value="@Model.Extension.Model.PortName" selected>(Removed) @Model.Extension.Model.PortName</option>
+                                    }
                                     @foreach (var Port in @Model.Extension.Model.AvailablePortNames)
                                     {
                                         <option value="@Port" @Raw(isSelected(Model.Extension.Model.PortName, Port))>@Port</option>

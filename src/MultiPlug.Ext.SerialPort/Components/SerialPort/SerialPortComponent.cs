@@ -258,8 +258,12 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
                 Close();
             }
 
+            m_SerialPort = new DotNetSerialPort();
+
             try
             {
+                PortExists(PortName);
+
                 m_SerialPort.PortName = PortName;
                 m_SerialPort.BaudRate = BaudRate.Value;
 
@@ -339,6 +343,9 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
                             }
 
                         }
+
+                        Close();
+
                     }, m_ReadCancellationToken.Token);
                 }
             }
@@ -350,26 +357,54 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
 
         internal void Close()
         {
-            if (m_SerialPort.IsOpen)
+            lock (this) // Read thread and User Action will call this.
             {
+                if (m_SerialPort == null)
+                {
+                    Opened = false;
+                    return;
+                }
+
+                if (m_SerialPort.IsOpen)
+                {
+                    try
+                    {
+                        m_SerialPort.Close();
+                    }
+                    catch (System.IO.IOException theException)
+                    {
+                        m_LoggingService.WriteEntry((uint)EventLogEntryCodes.Exception, new string[] { theException.Message });
+                    }
+                }
+
+                m_SerialPort.Dispose();
+                m_SerialPort = null;
+                GC.Collect(); // Updates the Available Serial ports on Windows if a Port was removed.
+                GC.WaitForPendingFinalizers();
+
                 try
                 {
-                    m_SerialPort.Close();
+                    PortExists(PortName);
+                }
+                catch (InvalidOperationException theException)
+                {
+                    m_LoggingService.WriteEntry((uint)EventLogEntryCodes.Exception, new string[] { theException.Message });
+                }
+
+                if(Opened)
+                {
                     if (LoggingLevel > 1)
                     {
                         m_LoggingService.WriteEntry((uint)EventLogEntryCodes.PortClosed);
                     }
                 }
-                catch (System.IO.IOException theException)
-                {
-                    m_LoggingService.WriteEntry((uint)EventLogEntryCodes.Exception, new string[] { theException.Message });
-                }
+
+
+                m_ReadCancellationToken.Cancel();
+                m_ReadCancellationToken = new CancellationTokenSource();
+
+                Opened = false;
             }
-
-            m_ReadCancellationToken.Cancel();
-            m_ReadCancellationToken = new CancellationTokenSource();
-
-            Opened = false;
         }
 
         private void OnSubscriptionEvent(SubscriptionEvent theSubscriptionEvent)
@@ -398,7 +433,7 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
 
             string Read = string.Empty;
 
-            switch ( ReadStrategy)
+            switch ( ReadStrategy )
             {
                 case 0:
                     try
@@ -423,6 +458,10 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
                         throw (theException);
                     }
                     catch (TimeoutException) { return; }
+                    catch (System.IO.IOException theException)
+                    {
+                        throw (theException);
+                    }
                     break;
                 case 1:
                     try
@@ -445,10 +484,26 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
                         throw (theException);
                     }
                     catch (TimeoutException) { return; }
+                    catch(System.IO.IOException theException)
+                    {
+                        throw (theException);
+                    }
                     break;
             }
 
-            if ( ! string.IsNullOrEmpty(Read))
+            if (string.IsNullOrEmpty(Read)) // Linux/Mono will read empty on the physical removal of a Serial Port
+            {
+                try
+                {
+                    PortExists(PortName);
+                }
+                catch(InvalidOperationException theException)
+                {
+                    // We record the error on Close()
+                    throw (theException);
+                }
+            }
+            else
             {
                 if(ReadTrim.Value)
                 {
@@ -496,6 +551,22 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
                 }
 
                 ReadEvent.Invoke(new Payload(ReadEvent.Id, new PayloadSubject[] { new PayloadSubject(ReadEvent.Subjects[0], Read) }));
+            }
+        }
+        /// <summary>
+        /// Checks if a Port Name exists.
+        /// </summary>
+        /// <param name="thePortName">
+        /// The Port Name
+        /// </param>
+        /// <exception cref="InvalidOperationException">
+        /// The specified port doesn't exists. 
+        /// </exception>
+        private static void PortExists( string thePortName )
+        {
+            if (!Utils.SerialPort.GetPortNames().Contains(thePortName))
+            {
+                throw (new InvalidOperationException("The port '" + thePortName + "' does not exist."));
             }
         }
     }
