@@ -120,6 +120,8 @@ namespace MultiPlug.Ext.SerialPort
                 SerialPortsList.Remove(SerialPortSearch);
                 SerialPorts = SerialPortsList.ToArray();
 
+                SerialPortSearch.Dispose();
+
                 AggregateSubscriptions();
                 AggregateEvents();
 

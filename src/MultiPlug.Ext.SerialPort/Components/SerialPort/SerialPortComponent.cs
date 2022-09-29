@@ -569,5 +569,19 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
                 throw (new InvalidOperationException("The port '" + thePortName + "' does not exist."));
             }
         }
+
+        internal new void Dispose()
+        {
+            try
+            {
+                // Bug Created https://github.com/British-Systems/MultiPlug/issues/52
+                m_LoggingService.Delete();
+            }
+            catch (NotImplementedException)
+            {
+            }
+
+            base.Dispose();
+        }
     }
 }
