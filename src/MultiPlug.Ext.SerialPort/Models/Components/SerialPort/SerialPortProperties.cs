@@ -63,7 +63,8 @@ namespace MultiPlug.Ext.SerialPort.Models.Components.SerialPort
 
         [DataMember]
         public string WritePrefix { get; set; }
-
+        [DataMember]
+        public string WriteSeparator { get; set; }
         [DataMember]
         public string WriteAppend { get; set; }
     }

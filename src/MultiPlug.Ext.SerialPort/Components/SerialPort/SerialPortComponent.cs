@@ -29,6 +29,7 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
         private string m_ReadTo = string.Empty;
         private string m_WritePrefix = string.Empty;
         private string m_WriteAppend = string.Empty;
+        private string m_WriteSeparator = string.Empty;
 
         public SerialPortComponent(string theGuid, ILoggingService theLoggingService)
         {
@@ -137,6 +138,12 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
                 m_WriteAppend = WriteAppend != null ? Regex.Unescape(WriteAppend) : string.Empty;
             }
 
+            if (theNewProperties.WriteSeparator != null && WriteSeparator != theNewProperties.WriteSeparator)
+            {
+                WriteSeparator = theNewProperties.WriteSeparator;
+                m_WriteSeparator = WriteSeparator != null ? Regex.Unescape(WriteSeparator) : string.Empty;
+            }
+
             if (theNewProperties.ReadTrim != null && ReadTrim != theNewProperties.ReadTrim)
             {
                 ReadTrim = theNewProperties.ReadTrim;
@@ -157,7 +164,7 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
                 if( Event.Merge(ReadEvent, theNewProperties.ReadEvent) ) { FlagEventUpdated = true; }
             }
 
-            if (theNewProperties.WriteSubscriptions != null && UpdateMachineReadySubscriptions(theNewProperties.WriteSubscriptions))
+            if (theNewProperties.WriteSubscriptions != null && UpdateWriteSubscriptions(theNewProperties.WriteSubscriptions))
             {
                 FlagSubscriptionUpdated = true;
             }
@@ -208,7 +215,7 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
             return false;
         }
 
-        private bool UpdateMachineReadySubscriptions(Subscription[] theMachineReadySubscriptions)
+        private bool UpdateWriteSubscriptions(Subscription[] theMachineReadySubscriptions)
         {
             bool Result = false;
 
@@ -409,12 +416,13 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
 
         private void OnSubscriptionEvent(SubscriptionEvent theSubscriptionEvent)
         {
-            foreach(PayloadSubject PayloadSubject in theSubscriptionEvent.PayloadSubjects)
+            string[] AllSubjectValues = theSubscriptionEvent.PayloadSubjects.Select(item => item.Value).ToArray();
+
+            string WriteValue = string.Join(m_WriteSeparator, AllSubjectValues);
+
+            if (m_SerialPort.IsOpen)
             {
-                if (m_SerialPort.IsOpen)
-                {
-                    m_SerialPort.Write(m_WritePrefix + PayloadSubject.Value + m_WriteAppend);
-                }
+                m_SerialPort.Write(m_WritePrefix + WriteValue + m_WriteAppend);
 
                 if (LoggingLevel == 1)
                 {
@@ -422,7 +430,7 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
                 }
                 else if (LoggingLevel == 2)
                 {
-                    m_LoggingService.WriteEntry((uint)EventLogEntryCodes.DataWrite, new string[] { PayloadSubject.Value });
+                    m_LoggingService.WriteEntry((uint)EventLogEntryCodes.DataWrite, new string[] { WriteValue });
                 }
             }
         }

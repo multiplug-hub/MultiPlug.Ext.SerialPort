@@ -22,6 +22,7 @@ namespace MultiPlug.Ext.SerialPort.Models.Settings.SerialPort
         public bool WriteLine { get; set; }
         public int WriteTimeout { get; set; }
         public string WritePrefix { get; set; }
+        public string WriteSeparator { get; set; }
         public string WriteAppend { get; set; }
         public string[] WriteSubscriptionGuids { get; set; }
         public string[] WriteSubscriptionIds { get; set; }

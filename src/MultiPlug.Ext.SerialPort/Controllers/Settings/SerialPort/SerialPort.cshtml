@@ -279,7 +279,7 @@
 
             <div class="box non-collapsible">
                 <div class="row-fluid">
-                    <div class="span4">
+                    <div class="span3">
                         <div class="row-fluid"><div class="span12">Write Prefix</div></div>
                         <div class="row-fluid">
                             <div class="span12">
@@ -322,13 +322,62 @@
                                             </li>
                                         </ul>
                                     </div>
-                                    <input id="WritePrefixValue" name="WritePrefix" class="input-block-level" type="text" value="@Model.Extension.Model.WritePrefix" />
+                                    <input id="WritePrefixValue" name="WritePrefix" class="span10" type="text" value="@Model.Extension.Model.WritePrefix" />
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="span4">
+                    <div class="span3">
+                        <div class="row-fluid"><div class="span12">Write Separator</div></div>
+                        <div class="row-fluid">
+                            <div class="span12">
+                                <div class="input-prepend">
+                                    <div class="btn-group">
+                                        <button class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+                                            <span class="caret">
+                                            </span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="WriteSeparatorSuggestion" data-writeappend="\u0020" href="#">Space</a>
+                                            </li>
+                                            <li>
+                                                <a class="WriteSeparatorSuggestion" data-writeappend="\u0000" href="#">NUL (Null)</a>
+                                            </li>
+                                            <li>
+                                                <a class="WriteSeparatorSuggestion" data-writeappend="\u0001" href="#">SOH (Start of Heading)</a>
+                                            </li>
+                                            <li>
+                                                <a class="WriteSeparatorSuggestion" data-writeappend="\u0002" href="#">STX (Start of Text)</a>
+                                            </li>
+                                            <li>
+                                                <a class="WriteSeparatorSuggestion" data-writeappend="\u0003" href="#">ETX (End of Text)</a>
+                                            </li>
+                                            <li>
+                                                <a class="WriteSeparatorSuggestion" data-writeappend="\u0004" href="#">EOT (End of Transmission)</a>
+                                            </li>
+                                            <li>
+                                                <a class="WriteSeparatorSuggestion" data-writeappend="\u0005" href="#">ENQ (Enquiry)</a>
+                                            </li>
+                                            <li>
+                                                <a class="WriteSeparatorSuggestion" data-writeappend="\u0006" href="#">ACK (Acknowledge)</a>
+                                            </li>
+                                            <li>
+                                                <a class="WriteSeparatorSuggestion" data-writeappend="\u000A" href="#">LF (Line Feed)</a>
+                                            </li>
+                                            <li>
+                                                <a class="WriteSeparatorSuggestion" data-writeappend="\u000D" href="#">CR (Carriage Return)</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <input id="WriteSeparatorValue" name="WriteSeparator" class="span10" type="text" value="@Model.Extension.Model.WriteSeparator" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="span3">
                         <div class="row-fluid"><div class="span12">Write Suffix</div></div>
                         <div class="row-fluid">
                             <div class="span12">
@@ -371,13 +420,13 @@
                                             </li>
                                         </ul>
                                     </div>
-                                    <input id="WriteAppendValue" name="WriteAppend" class="input-block-level" type="text" value="@Model.Extension.Model.WriteAppend"/>
+                                    <input id="WriteAppendValue" name="WriteAppend" class="span10" type="text" value="@Model.Extension.Model.WriteAppend"/>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="span4">
+                    <div class="span3">
                         <div class="row-fluid"><div class="span12">Write Timeout [m/s]</div></div>
                         <div class="row-fluid">
                             <div class="span12">

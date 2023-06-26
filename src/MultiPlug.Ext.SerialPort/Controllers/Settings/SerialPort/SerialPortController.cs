@@ -50,6 +50,7 @@ namespace MultiPlug.Ext.SerialPort.Controllers.Settings.SerialPort
                         ReadAppend = SerialPortSearch.ReadAppend,
                         WriteTimeout = SerialPortSearch.WriteTimeout.Value,
                         WritePrefix = SerialPortSearch.WritePrefix,
+                        WriteSeparator = SerialPortSearch.WriteSeparator,
                         WriteAppend = SerialPortSearch.WriteAppend,
                         WriteSubscriptionGuids = SerialPortSearch.WriteSubscriptions.Select( x => x.Guid).ToArray(),
                         WriteSubscriptionIds = SerialPortSearch.WriteSubscriptions.Select(x => x.Id).ToArray(),
@@ -104,6 +105,7 @@ namespace MultiPlug.Ext.SerialPort.Controllers.Settings.SerialPort
                     ReadAppend = theModel.ReadAppend,
                     WriteTimeout = theModel.WriteTimeout,
                     WritePrefix = theModel.WritePrefix,
+                    WriteSeparator = theModel.WriteSeparator,
                     WriteAppend = theModel.WriteAppend,
                     WriteSubscriptions = Subscriptions
                 }
