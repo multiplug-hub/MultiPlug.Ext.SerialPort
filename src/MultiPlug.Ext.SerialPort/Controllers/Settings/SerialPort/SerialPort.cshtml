@@ -340,34 +340,34 @@
                                         </button>
                                         <ul class="dropdown-menu">
                                             <li>
-                                                <a class="WriteSeparatorSuggestion" data-writeappend="\u0020" href="#">Space</a>
+                                                <a class="WriteSeparatorSuggestion" data-writeseparator="\u0020" href="#">Space</a>
                                             </li>
                                             <li>
-                                                <a class="WriteSeparatorSuggestion" data-writeappend="\u0000" href="#">NUL (Null)</a>
+                                                <a class="WriteSeparatorSuggestion" data-writeseparator="\u0000" href="#">NUL (Null)</a>
                                             </li>
                                             <li>
-                                                <a class="WriteSeparatorSuggestion" data-writeappend="\u0001" href="#">SOH (Start of Heading)</a>
+                                                <a class="WriteSeparatorSuggestion" data-writeseparator="\u0001" href="#">SOH (Start of Heading)</a>
                                             </li>
                                             <li>
-                                                <a class="WriteSeparatorSuggestion" data-writeappend="\u0002" href="#">STX (Start of Text)</a>
+                                                <a class="WriteSeparatorSuggestion" data-writeseparator="\u0002" href="#">STX (Start of Text)</a>
                                             </li>
                                             <li>
-                                                <a class="WriteSeparatorSuggestion" data-writeappend="\u0003" href="#">ETX (End of Text)</a>
+                                                <a class="WriteSeparatorSuggestion" data-writeseparator="\u0003" href="#">ETX (End of Text)</a>
                                             </li>
                                             <li>
-                                                <a class="WriteSeparatorSuggestion" data-writeappend="\u0004" href="#">EOT (End of Transmission)</a>
+                                                <a class="WriteSeparatorSuggestion" data-writeseparator="\u0004" href="#">EOT (End of Transmission)</a>
                                             </li>
                                             <li>
-                                                <a class="WriteSeparatorSuggestion" data-writeappend="\u0005" href="#">ENQ (Enquiry)</a>
+                                                <a class="WriteSeparatorSuggestion" data-writeseparator="\u0005" href="#">ENQ (Enquiry)</a>
                                             </li>
                                             <li>
-                                                <a class="WriteSeparatorSuggestion" data-writeappend="\u0006" href="#">ACK (Acknowledge)</a>
+                                                <a class="WriteSeparatorSuggestion" data-writeseparator="\u0006" href="#">ACK (Acknowledge)</a>
                                             </li>
                                             <li>
-                                                <a class="WriteSeparatorSuggestion" data-writeappend="\u000A" href="#">LF (Line Feed)</a>
+                                                <a class="WriteSeparatorSuggestion" data-writeseparator="\u000A" href="#">LF (Line Feed)</a>
                                             </li>
                                             <li>
-                                                <a class="WriteSeparatorSuggestion" data-writeappend="\u000D" href="#">CR (Carriage Return)</a>
+                                                <a class="WriteSeparatorSuggestion" data-writeseparator="\u000D" href="#">CR (Carriage Return)</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -537,6 +537,11 @@
     $('.WritePrefixSuggestion').click(function (event) {
         event.preventDefault();
         $("#WritePrefixValue").val($("#WritePrefixValue").val() + $(this).attr("data-writeprefix"));
+    });
+
+    $('.WriteSeparatorSuggestion').click(function (event) {
+        event.preventDefault();
+        $("#WriteSeparatorValue").val($("#WriteSeparatorValue").val() + $(this).attr("data-writeseparator"));
     });
 
     $('.WriteAppendSuggestion').click(function (event) {
