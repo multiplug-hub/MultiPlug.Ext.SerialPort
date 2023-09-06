@@ -55,7 +55,8 @@ namespace MultiPlug.Ext.SerialPort.Controllers.Settings.SerialPort
                         WriteSubscriptionGuids = SerialPortSearch.WriteSubscriptions.Select( x => x.Guid).ToArray(),
                         WriteSubscriptionIds = SerialPortSearch.WriteSubscriptions.Select(x => x.Id).ToArray(),
                         AvailablePortNames = Components.Utils.SerialPort.GetPortNames(),
-                        AvailableBaudRates = Components.Utils.SerialPort.GetBaudRates()
+                        AvailableBaudRates = Components.Utils.SerialPort.GetBaudRates(),
+                        ReadRetryAfter = SerialPortSearch.ReadRetryAfter.Value
                     },
                     Template = Templates.SettingsSerialPort
                 };
@@ -107,7 +108,8 @@ namespace MultiPlug.Ext.SerialPort.Controllers.Settings.SerialPort
                     WritePrefix = theModel.WritePrefix,
                     WriteSeparator = theModel.WriteSeparator,
                     WriteAppend = theModel.WriteAppend,
-                    WriteSubscriptions = Subscriptions
+                    WriteSubscriptions = Subscriptions,
+                    ReadRetryAfter = theModel.ReadRetryAfter
                 }
             });
 

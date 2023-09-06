@@ -58,6 +58,9 @@ namespace MultiPlug.Ext.SerialPort.Models.Components.SerialPort
         public string ReadAppend { get; set; }
 
         [DataMember]
+        public int? ReadRetryAfter { get; set; }
+
+        [DataMember]
         public bool? Enabled { get; set; }
         public bool Opened { get; set; }
 

@@ -45,6 +45,7 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
             ReadStrategy = 0;
             ReadTrim = false;
             Enabled = false;
+            ReadRetryAfter = 2;
 
             m_LoggingService = theLoggingService;
             m_SerialPort = new DotNetSerialPort();
@@ -157,6 +158,11 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
             if (theNewProperties.ReadAppend != null && ReadAppend != theNewProperties.ReadAppend)
             {
                 ReadAppend = theNewProperties.ReadAppend;
+            }
+
+            if(theNewProperties.ReadRetryAfter != null && ReadRetryAfter != theNewProperties.ReadRetryAfter)
+            {
+                ReadRetryAfter = theNewProperties.ReadRetryAfter;
             }
 
             if ( theNewProperties.ReadEvent != null)
@@ -450,14 +456,28 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
                         var OneChar = new char[1];
                         int Chars = m_SerialPort.Read(OneChar, 0, 1);
                         // Now Continue
-                        if (m_SerialPort.BytesToRead > 0)
+
+                        int BytesToRead = 0;
+
+                        // Get the true value of the BytesToRead as it maybe being added to
+                        while (m_SerialPort.BytesToRead != BytesToRead)
+                        {
+                            BytesToRead = m_SerialPort.BytesToRead;
+
+                            if (ReadRetryAfter.Value > 0)
+                            {
+                                Task.Delay(ReadRetryAfter.Value).Wait();
+                            }
+                        }
+
+                        if(BytesToRead > 0)
                         {
                             Read = m_SerialPort.ReadExisting();
                         }
 
-                        if(Chars == 1)
+                        if (Chars == 1)
                         {
-                            Read = new string(OneChar) + Read;
+                            Read = new string(OneChar) + Read;// string.Concat(Reads);
                         }
                     }
                     catch (InvalidOperationException theException)
