@@ -56,6 +56,8 @@ namespace MultiPlug.Ext.SerialPort.Models.Exchange
             }
         }
 
+        [DataMember]
+        public bool? IsHex { get; set; }
 
         public string WritePrefixUnescaped = string.Empty;
         public string WriteSeparatorUnescaped = string.Empty;
@@ -66,6 +68,7 @@ namespace MultiPlug.Ext.SerialPort.Models.Exchange
         public WriteSubscription()
         {
             this.Event += OnWriteSubscriptionEvent;
+            IsHex = false;
         }
 
         private void OnWriteSubscriptionEvent(SubscriptionEvent obj)
@@ -88,6 +91,11 @@ namespace MultiPlug.Ext.SerialPort.Models.Exchange
             if (theMergeFrom.WriteAppend != null && theMergeFrom.WriteAppend != theMerged.WriteAppend)
             {
                 theMerged.WriteAppend = theMergeFrom.WriteAppend;
+            }
+
+            if(theMergeFrom.IsHex != null && theMergeFrom.IsHex != theMerged.IsHex)
+            {
+                theMerged.IsHex = theMergeFrom.IsHex;
             }
 
             return Base.Exchange.Subscription.Merge(theMerged, theMergeFrom);

@@ -421,6 +421,28 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
             }
         }
 
+        private static byte[] HexStringToBytes(string s)
+        {
+            char[] splitter = { ',', '-', ' ' };
+            string[] splitS = s.Split(splitter, StringSplitOptions.RemoveEmptyEntries);
+
+            byte[] buff = new byte[splitS.Length];
+
+            for (int i = 0; i < splitS.Length; i++)
+            {
+                try
+                {
+                    buff[i] = Convert.ToByte(splitS[i], 16);
+                }
+                catch
+                {
+                    buff[i] = 0x00;
+                }
+            }
+            return buff;
+        }
+
+
         private void OnSubscriptionEvent(SubscriptionEvent theSubscriptionEvent, WriteSubscription theWriteSubscription)
         {
             string WriteSeparator = string.IsNullOrEmpty(theWriteSubscription.WriteSeparatorUnescaped) ? m_WriteSeparator : theWriteSubscription.WriteSeparatorUnescaped;
@@ -436,7 +458,15 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
 
             if (m_SerialPort.IsOpen)
             {
-                m_SerialPort.Write(WriteValue);
+                if(theWriteSubscription.IsHex.Value)
+                {
+                    byte[] StringAsByteArray = HexStringToBytes(WriteValue);
+                    m_SerialPort.Write(StringAsByteArray, 0, StringAsByteArray.Length);
+                }
+                else
+                {
+                    m_SerialPort.Write(WriteValue);
+                }
 
                 if (LoggingLevel == 1)
                 {

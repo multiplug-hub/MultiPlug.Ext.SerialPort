@@ -58,6 +58,7 @@ namespace MultiPlug.Ext.SerialPort.Controllers.Settings.SerialPort
                         WriteSubscriptionWritePrefixs = SerialPortSearch.WriteSubscriptions.Select(x => x.WritePrefix).ToArray(),
                         WriteSubscriptionWriteSeparators = SerialPortSearch.WriteSubscriptions.Select(x => x.WriteSeparator).ToArray(),
                         WriteSubscriptionWriteSuffixs = SerialPortSearch.WriteSubscriptions.Select(x => x.WriteAppend).ToArray(),
+                        WriteSubscriptionIsHexs = SerialPortSearch.WriteSubscriptions.Select(x => x.IsHex.Value).ToArray(),
                         AvailablePortNames = Components.Utils.SerialPort.GetPortNames(),
                         AvailableBaudRates = Components.Utils.SerialPort.GetBaudRates(),
                         ReadRetryAfter = SerialPortSearch.ReadRetryAfter.Value
@@ -75,6 +76,25 @@ namespace MultiPlug.Ext.SerialPort.Controllers.Settings.SerialPort
             {
                 Subscriptions = new WriteSubscription[theModel.WriteSubscriptionGuids.Length];
 
+
+                bool[] IsHexs = new bool[theModel.WriteSubscriptionGuids.Length];
+
+                int index = 0;
+
+                for (int i = 0; i < theModel.WriteSubscriptionIsHexs.Length; i++)
+                {
+                    if((i + 1) < theModel.WriteSubscriptionIsHexs.Length && theModel.WriteSubscriptionIsHexs[i+1])
+                    {
+                        IsHexs[index] = true;
+                        i++;
+                    }
+                    else
+                    {
+                        IsHexs[index] = false;
+                    }
+                    index++;
+                }
+
                 for (int i = 0; i< theModel.WriteSubscriptionGuids.Length; i++)
                 {
                     Subscriptions[i] = new WriteSubscription
@@ -83,7 +103,8 @@ namespace MultiPlug.Ext.SerialPort.Controllers.Settings.SerialPort
                         Id = theModel.WriteSubscriptionIds[i],
                         WritePrefix = theModel.WriteSubscriptionWritePrefixs[i],
                         WriteSeparator = theModel.WriteSubscriptionWriteSeparators[i],
-                        WriteAppend = theModel.WriteSubscriptionWriteSuffixs[i]
+                        WriteAppend = theModel.WriteSubscriptionWriteSuffixs[i],
+                        IsHex = IsHexs[i]
                     };
                 }
             }

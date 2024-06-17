@@ -29,6 +29,7 @@ namespace MultiPlug.Ext.SerialPort.Models.Settings.SerialPort
         public string[] WriteSubscriptionWritePrefixs { get; set; }
         public string[] WriteSubscriptionWriteSeparators { get; set; }
         public string[] WriteSubscriptionWriteSuffixs { get; set; }
+        public bool[] WriteSubscriptionIsHexs { get; set; }
         public string[] AvailablePortNames { get; set; }
         public string[] AvailableBaudRates { get; set; }
         public int ReadRetryAfter { get; set; }

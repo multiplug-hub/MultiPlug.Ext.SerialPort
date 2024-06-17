@@ -377,10 +377,11 @@
                             <table id="SubscriptionsTable" class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th class="span5">Subscription</th>
+                                        <th class="span4">Subscription</th>
                                         <th class="span2">Prefix</th>
                                         <th class="span2">Separator</th>
                                         <th class="span2">Suffix</th>
+                                        <th class="span1">Is Hex</th>
                                         <th class="span1"></th>
                                     </tr>
                                 </thead>
@@ -388,7 +389,7 @@
                                     @for (int i = 0; i < Model.Extension.Model.WriteSubscriptionGuids.Length; i++)
                                     {
                                         <tr>
-                                            <td class="span5">
+                                            <td class="span4">
                                                 <input name="WriteSubscriptionGuids" type="hidden" value="@Model.Extension.Model.WriteSubscriptionGuids[i]">
                                                 <input name="WriteSubscriptionIds" class="input-block-level mp-event-picker" type="text" value="@Model.Extension.Model.WriteSubscriptionIds[i]">
                                             </td>
@@ -450,16 +451,21 @@
                                                 </div>
                                             </td>
                                             <td class="span1">
+                                                <input type="hidden" name="WriteSubscriptionIsHexs" value="false">
+                                                <input type="checkbox" name="WriteSubscriptionIsHexs" value="true" @Raw(isChecked(Model.Extension.Model.WriteSubscriptionIsHexs[i]))>
+                                            </td>
+                                            <td class="span1">
                                                 <a class="btn btn-red btn-deletesubscription" href="@Raw(Model.Context.Paths.Home)serialport/delete/subscription/?id=@Model.Extension.Model.Guid&subguid=@Model.Extension.Model.WriteSubscriptionGuids[i]"><i class="icon-trash"></i></a>
                                             </td>
                                         </tr>
                                     }
 
                                     <tr>
-                                        <th class="span5"></th>
+                                        <th class="span1"></th>
                                         <th class="span2"></th>
                                         <th class="span2"></th>
                                         <th class="span2"></th>
+                                        <th class="span1"></th>
                                         <td class="span1">
                                             <button type="button" id="btn-subscription" class="btn btn-green"><i class="icon-plus"></i></button>
                                         </td>
@@ -506,7 +512,7 @@
 
     function NewSubscription() {
         return '<tr>\
-            <td class="span5">\
+            <td class="span4">\
                 <input name="WriteSubscriptionGuids" type="hidden" value="">\
                 <input name="WriteSubscriptionIds" class="input-block-level mp-event-picker" type="text" value="">\
             </td>\
@@ -551,6 +557,10 @@
                     </div>\
                     <input name="WriteSubscriptionWriteSuffixs" class="span9" type="text" value="">\
                 </div>\
+            </td>\
+            <td class="span1">\
+                <input type="hidden" name="WriteSubscriptionIsHexs" value="false">\
+                <input type="checkbox" name="WriteSubscriptionIsHexs" value="true">\
             </td>\
             <td class="span1">\
                 <a class="btn btn-red btn-deletesubscriptiontemp" href="#"><i class="icon-trash"></i></a>\
