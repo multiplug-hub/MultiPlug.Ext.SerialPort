@@ -2,6 +2,7 @@
 using MultiPlug.Base.Attribute;
 using MultiPlug.Base.Exchange;
 using MultiPlug.Base.Http;
+using MultiPlug.Ext.SerialPort.Models.Exchange;
 
 namespace MultiPlug.Ext.SerialPort.Controllers.Settings.SerialPort
 {
@@ -18,7 +19,7 @@ namespace MultiPlug.Ext.SerialPort.Controllers.Settings.SerialPort
                 };
             }
 
-            if(Core.Instance.DeleteSubscription(id, new Subscription
+            if(Core.Instance.DeleteSubscription(id, new WriteSubscription
             {
                 Guid = subguid
             }))

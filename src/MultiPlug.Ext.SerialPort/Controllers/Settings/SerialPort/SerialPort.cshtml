@@ -28,6 +28,23 @@
     }
 }
 
+@{ 
+    string[][] WriteSugestions = new string[][]
+    {
+        new string[]{ "\\u0020", "Space" },
+        new string[]{ "\\u0000", "NUL (Null)" },
+        new string[]{ "\\u0001", "SOH (Start of Heading)" },
+        new string[]{ "\\u0002", "STX (Start of Text)" },
+        new string[]{ "\\u0003", "ETX (End of Text)" },
+        new string[]{ "\\u0004", "EOT (End of Transmission)" },
+        new string[]{ "\\u0005", "ENQ (Enquiry)" },
+        new string[]{ "\\u0006", "ACK (Acknowledge)" },
+        new string[]{ "\\u000A", "LF (Line Feed)" },
+        new string[]{ "\\u000D", "CR (Carriage Return)" }
+    };
+
+}
+
 <form action="" method="post" accept-charset="utf-8" enctype="application/x-www-form-urlencoded" autocomplete="off">
     <section class="row-fluid">
 
@@ -197,36 +214,12 @@
                                             </span>
                                         </button>
                                         <ul class="dropdown-menu">
+@for (int i = 0; i < WriteSugestions.Length; i++)
+{
                                             <li>
-                                                <a class="ReadToSuggestion" data-readto="\u0020" href="#">Space</a>
+                                                <a class="WriteSuggestion" data-suggestiontext="@WriteSugestions[i][0]" href="#">@WriteSugestions[i][1]</a>
                                             </li>
-                                            <li>
-                                                <a class="ReadToSuggestion" data-readto="\u0000" href="#">NUL (Null)</a>
-                                            </li>
-                                            <li>
-                                                <a class="ReadToSuggestion" data-readto="\u0001" href="#">SOH (Start of Heading)</a>
-                                            </li>
-                                            <li>
-                                                <a class="ReadToSuggestion" data-readto="\u0002" href="#">STX (Start of Text)</a>
-                                            </li>
-                                            <li>
-                                                <a class="ReadToSuggestion" data-readto="\u0003" href="#">ETX (End of Text)</a>
-                                            </li>
-                                            <li>
-                                                <a class="ReadToSuggestion" data-readto="\u0004" href="#">EOT (End of Transmission)</a>
-                                            </li>
-                                            <li>
-                                                <a class="ReadToSuggestion" data-readto="\u0005" href="#">ENQ (Enquiry)</a>
-                                            </li>
-                                            <li>
-                                                <a class="ReadToSuggestion" data-readto="\u0006" href="#">ACK (Acknowledge)</a>
-                                            </li>
-                                            <li>
-                                                <a class="ReadToSuggestion" data-readto="\u000A" href="#">LF (Line Feed)</a>
-                                            </li>
-                                            <li>
-                                                <a class="ReadToSuggestion" data-readto="\u000D" href="#">CR (Carriage Return)</a>
-                                            </li>
+}
                                         </ul>
                                     </div>
                                     <input id="ReadToValue" name="ReadTo" class="input-block-level" type="text" value="@Model.Extension.Model.ReadTo" @Raw(isDisabled(Model.Extension.Model.ReadStrategy))>
@@ -286,164 +279,96 @@
             <h3 class="box-header">Write</h3>
 
             <div class="box non-collapsible">
+                <h4>Global Settings</h4>
                 <div class="row-fluid">
-                    <div class="span3">
-                        <div class="row-fluid"><div class="span12">Write Prefix</div></div>
+                    <div class="well">
                         <div class="row-fluid">
-                            <div class="span12">
-                                <div class="input-prepend">
-                                    <div class="btn-group">
-                                        <button class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1">
-                                            <span class="caret">
-                                            </span>
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a class="WritePrefixSuggestion" data-writeprefix="\u0020" href="#">Space</a>
-                                            </li>
-                                            <li>
-                                                <a class="WritePrefixSuggestion" data-writeprefix="\u0000" href="#">NUL (Null)</a>
-                                            </li>
-                                            <li>
-                                                <a class="WritePrefixSuggestion" data-writeprefix="\u0001" href="#">SOH (Start of Heading)</a>
-                                            </li>
-                                            <li>
-                                                <a class="WritePrefixSuggestion" data-writeprefix="\u0002" href="#">STX (Start of Text)</a>
-                                            </li>
-                                            <li>
-                                                <a class="WritePrefixSuggestion" data-writeprefix="\u0003" href="#">ETX (End of Text)</a>
-                                            </li>
-                                            <li>
-                                                <a class="WritePrefixSuggestion" data-writeprefix="\u0004" href="#">EOT (End of Transmission)</a>
-                                            </li>
-                                            <li>
-                                                <a class="WritePrefixSuggestion" data-writeprefix="\u0005" href="#">ENQ (Enquiry)</a>
-                                            </li>
-                                            <li>
-                                                <a class="WritePrefixSuggestion" data-writeprefix="\u0006" href="#">ACK (Acknowledge)</a>
-                                            </li>
-                                            <li>
-                                                <a class="WritePrefixSuggestion" data-writeprefix="\u000A" href="#">LF (Line Feed)</a>
-                                            </li>
-                                            <li>
-                                                <a class="WritePrefixSuggestion" data-writeprefix="\u000D" href="#">CR (Carriage Return)</a>
-                                            </li>
-                                        </ul>
+                            <div class="span3">
+                                <div class="row-fluid"><div class="span12">Write Prefix</div></div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="input-prepend">
+                                            <div class="btn-group">
+                                                <button class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+                                                    <span class="caret">
+                                                    </span>
+                                                </button>
+                                                <ul class="dropdown-menu">
+@for (int i = 0; i < WriteSugestions.Length; i++)
+{
+                                                    <li>
+                                                        <a class="WriteSuggestion" data-suggestiontext="@WriteSugestions[i][0]" href="#">@WriteSugestions[i][1]</a>
+                                                    </li>
+}
+                                                </ul>
+                                            </div>
+                                            <input id="WritePrefixValue" name="WritePrefix" class="span10" type="text" value="@Model.Extension.Model.WritePrefix" />
+                                        </div>
                                     </div>
-                                    <input id="WritePrefixValue" name="WritePrefix" class="span10" type="text" value="@Model.Extension.Model.WritePrefix" />
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <div class="span3">
-                        <div class="row-fluid"><div class="span12">Write Separator</div></div>
-                        <div class="row-fluid">
-                            <div class="span12">
-                                <div class="input-prepend">
-                                    <div class="btn-group">
-                                        <button class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1">
-                                            <span class="caret">
-                                            </span>
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a class="WriteSeparatorSuggestion" data-writeseparator="\u0020" href="#">Space</a>
-                                            </li>
-                                            <li>
-                                                <a class="WriteSeparatorSuggestion" data-writeseparator="\u0000" href="#">NUL (Null)</a>
-                                            </li>
-                                            <li>
-                                                <a class="WriteSeparatorSuggestion" data-writeseparator="\u0001" href="#">SOH (Start of Heading)</a>
-                                            </li>
-                                            <li>
-                                                <a class="WriteSeparatorSuggestion" data-writeseparator="\u0002" href="#">STX (Start of Text)</a>
-                                            </li>
-                                            <li>
-                                                <a class="WriteSeparatorSuggestion" data-writeseparator="\u0003" href="#">ETX (End of Text)</a>
-                                            </li>
-                                            <li>
-                                                <a class="WriteSeparatorSuggestion" data-writeseparator="\u0004" href="#">EOT (End of Transmission)</a>
-                                            </li>
-                                            <li>
-                                                <a class="WriteSeparatorSuggestion" data-writeseparator="\u0005" href="#">ENQ (Enquiry)</a>
-                                            </li>
-                                            <li>
-                                                <a class="WriteSeparatorSuggestion" data-writeseparator="\u0006" href="#">ACK (Acknowledge)</a>
-                                            </li>
-                                            <li>
-                                                <a class="WriteSeparatorSuggestion" data-writeseparator="\u000A" href="#">LF (Line Feed)</a>
-                                            </li>
-                                            <li>
-                                                <a class="WriteSeparatorSuggestion" data-writeseparator="\u000D" href="#">CR (Carriage Return)</a>
-                                            </li>
-                                        </ul>
+                            <div class="span3">
+                                <div class="row-fluid"><div class="span12">Write Separator</div></div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="input-prepend">
+                                            <div class="btn-group">
+                                                <button class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+                                                    <span class="caret">
+                                                    </span>
+                                                </button>
+                                                <ul class="dropdown-menu">
+@for (int i = 0; i < WriteSugestions.Length; i++)
+{
+                                                    <li>
+                                                        <a class="WriteSuggestion" data-suggestiontext="@WriteSugestions[i][0]" href="#">@WriteSugestions[i][1]</a>
+                                                    </li>
+}
+                                                </ul>
+                                            </div>
+                                            <input id="WriteSeparatorValue" name="WriteSeparator" class="span10" type="text" value="@Model.Extension.Model.WriteSeparator" />
+                                        </div>
                                     </div>
-                                    <input id="WriteSeparatorValue" name="WriteSeparator" class="span10" type="text" value="@Model.Extension.Model.WriteSeparator" />
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <div class="span3">
-                        <div class="row-fluid"><div class="span12">Write Suffix</div></div>
-                        <div class="row-fluid">
-                            <div class="span12">
-                                <div class="input-prepend">
-                                    <div class="btn-group">
-                                        <button class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1">
-                                            <span class="caret">
-                                            </span>
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a class="WriteAppendSuggestion" data-writeappend="\u0020" href="#">Space</a>
-                                            </li>
-                                            <li>
-                                                <a class="WriteAppendSuggestion" data-writeappend="\u0000" href="#">NUL (Null)</a>
-                                            </li>
-                                            <li>
-                                                <a class="WriteAppendSuggestion" data-writeappend="\u0001" href="#">SOH (Start of Heading)</a>
-                                            </li>
-                                            <li>
-                                                <a class="WriteAppendSuggestion" data-writeappend="\u0002" href="#">STX (Start of Text)</a>
-                                            </li>
-                                            <li>
-                                                <a class="WriteAppendSuggestion" data-writeappend="\u0003" href="#">ETX (End of Text)</a>
-                                            </li>
-                                            <li>
-                                                <a class="WriteAppendSuggestion" data-writeappend="\u0004" href="#">EOT (End of Transmission)</a>
-                                            </li>
-                                            <li>
-                                                <a class="WriteAppendSuggestion" data-writeappend="\u0005" href="#">ENQ (Enquiry)</a>
-                                            </li>
-                                            <li>
-                                                <a class="WriteAppendSuggestion" data-writeappend="\u0006" href="#">ACK (Acknowledge)</a>
-                                            </li>
-                                            <li>
-                                                <a class="WriteAppendSuggestion" data-writeappend="\u000A" href="#">LF (Line Feed)</a>
-                                            </li>
-                                            <li>
-                                                <a class="WriteAppendSuggestion" data-writeappend="\u000D" href="#">CR (Carriage Return)</a>
-                                            </li>
-                                        </ul>
+                            <div class="span3">
+                                <div class="row-fluid"><div class="span12">Write Suffix</div></div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="input-prepend">
+                                            <div class="btn-group">
+                                                <button class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+                                                    <span class="caret">
+                                                    </span>
+                                                </button>
+                                                <ul class="dropdown-menu">
+@for (int i = 0; i < WriteSugestions.Length; i++)
+{
+                                                    <li>
+                                                        <a class="WriteSuggestion" data-suggestiontext="@WriteSugestions[i][0]" href="#">@WriteSugestions[i][1]</a>
+                                                    </li>
+}
+                                                </ul>
+                                            </div>
+                                            <input id="WriteAppendValue" name="WriteAppend" class="span10" type="text" value="@Model.Extension.Model.WriteAppend" />
+                                        </div>
                                     </div>
-                                    <input id="WriteAppendValue" name="WriteAppend" class="span10" type="text" value="@Model.Extension.Model.WriteAppend"/>
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <div class="span3">
-                        <div class="row-fluid"><div class="span12">Write Timeout [m/s]</div></div>
-                        <div class="row-fluid">
-                            <div class="span12">
-                                <input name="WriteTimeout" class="input-block-level" type="number" min="0" max="2147483647" value="@Model.Extension.Model.WriteTimeout.ToString()">
+                            <div class="span3">
+                                <div class="row-fluid"><div class="span12">Write Timeout [m/s]</div></div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <input name="WriteTimeout" class="input-block-level" type="number" min="0" max="2147483647" value="@Model.Extension.Model.WriteTimeout.ToString()">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <h4>Write Subscriptions</h4>
                 <div class="row-fluid">
                     <div class="well">
@@ -452,7 +377,10 @@
                             <table id="SubscriptionsTable" class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th class="span11">Subscription</th>
+                                        <th class="span5">Subscription</th>
+                                        <th class="span2">Prefix</th>
+                                        <th class="span2">Separator</th>
+                                        <th class="span2">Suffix</th>
                                         <th class="span1"></th>
                                     </tr>
                                 </thead>
@@ -460,9 +388,66 @@
                                     @for (int i = 0; i < Model.Extension.Model.WriteSubscriptionGuids.Length; i++)
                                     {
                                         <tr>
-                                            <td class="span11">
+                                            <td class="span5">
                                                 <input name="WriteSubscriptionGuids" type="hidden" value="@Model.Extension.Model.WriteSubscriptionGuids[i]">
                                                 <input name="WriteSubscriptionIds" class="input-block-level mp-event-picker" type="text" value="@Model.Extension.Model.WriteSubscriptionIds[i]">
+                                            </td>
+                                            <td class="span2">
+                                                <div class="input-prepend">
+                                                    <div class="btn-group">
+                                                        <button class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+                                                            <span class="caret">
+                                                            </span>
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            @for (int j = 0; j < WriteSugestions.Length; j++)
+                                                            {
+                                                                <li>
+                                                                    <a class="WriteSuggestion" data-suggestiontext="@WriteSugestions[j][0]" href="#">@WriteSugestions[j][1]</a>
+                                                                </li>
+                                                            }
+                                                        </ul>
+                                                    </div>
+                                                    <input name="WriteSubscriptionWritePrefixs" class="span9" type="text" value="@Model.Extension.Model.WriteSubscriptionWritePrefixs[i]">
+                                                </div>
+                                            </td>
+                                            <td class="span2">
+                                                <div class="input-prepend">
+                                                    <div class="btn-group">
+                                                        <button class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+                                                            <span class="caret">
+                                                            </span>
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            @for (int j = 0; j < WriteSugestions.Length; j++)
+                                                            {
+                                                                <li>
+                                                                    <a class="WriteSuggestion" data-suggestiontext="@WriteSugestions[j][0]" href="#">@WriteSugestions[j][1]</a>
+                                                                </li>
+                                                            }
+                                                        </ul>
+                                                    </div>
+                                                    <input name="WriteSubscriptionWriteSeparators" class="span9" type="text" value="@Model.Extension.Model.WriteSubscriptionWriteSeparators[i]">
+                                                </div>
+                                            </td>
+                                            <td class="span2">
+                                                <div class="input-prepend">
+                                                    <div class="btn-group">
+                                                        <button class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+                                                            <span class="caret">
+                                                            </span>
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            @for (int j = 0; j < WriteSugestions.Length; j++)
+                                                            {
+                                                                <li>
+                                                                    <a class="WriteSuggestion" data-suggestiontext="@WriteSugestions[j][0]" href="#">@WriteSugestions[j][1]</a>
+                                                                </li>
+                                                            }
+                                                        </ul>
+                                                    </div>
+                                                    <input name="WriteSubscriptionWriteSuffixs" class="span9" type="text" value="@Model.Extension.Model.WriteSubscriptionWriteSuffixs[i]">
+                                                </div>
                                             </td>
                                             <td class="span1">
                                                 <a class="btn btn-red btn-deletesubscription" href="@Raw(Model.Context.Paths.Home)serialport/delete/subscription/?id=@Model.Extension.Model.Guid&subguid=@Model.Extension.Model.WriteSubscriptionGuids[i]"><i class="icon-trash"></i></a>
@@ -471,7 +456,10 @@
                                     }
 
                                     <tr>
-                                        <td class="span11"></td>
+                                        <th class="span5"></th>
+                                        <th class="span2"></th>
+                                        <th class="span2"></th>
+                                        <th class="span2"></th>
                                         <td class="span1">
                                             <button type="button" id="btn-subscription" class="btn btn-green"><i class="icon-plus"></i></button>
                                         </td>
@@ -489,6 +477,22 @@
 </form>
 
 <script>
+    var writeSuggestionList = [];
+    var html1 = '<li><a class="WriteSuggestion" data-suggestiontext="';
+    var html2 = '" href="#">'
+    var html3 = '</a></li>';
+
+    @for (int j = 0; j < WriteSugestions.Length; j++)
+    {
+@:writeSuggestionList.push(html1);
+<text>writeSuggestionList.push('\</text>@WriteSugestions[j][0]<text>');</text>
+@:writeSuggestionList.push(html2);
+<text>writeSuggestionList.push('</text>@WriteSugestions[j][1]<text>');</text>
+@:writeSuggestionList.push(html3);
+    }
+
+    writeSuggestionList = writeSuggestionList.join('');
+
     $("input:radio").change(function () {
         if ($("#ReadTo").is(":checked")) {
             $("#ReadToValue").removeAttr("disabled");
@@ -502,9 +506,51 @@
 
     function NewSubscription() {
         return '<tr>\
-            <td class="span11">\
+            <td class="span5">\
                 <input name="WriteSubscriptionGuids" type="hidden" value="">\
                 <input name="WriteSubscriptionIds" class="input-block-level mp-event-picker" type="text" value="">\
+            </td>\
+            <td class="span2">\
+                <div class="input-prepend">\
+                    <div class="btn-group">\
+                        <button class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1">\
+                            <span class="caret">\
+                            </span>\
+                        </button>\
+                        <ul class="dropdown-menu">'
+        + writeSuggestionList +
+                        '</ul>\
+                    </div>\
+                    <input name="WriteSubscriptionWritePrefixs" class="span9" type="text" value="">\
+                </div>\
+            </td>\
+            <td class="span2">\
+                <div class="input-prepend">\
+                    <div class="btn-group">\
+                        <button class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1">\
+                            <span class="caret">\
+                            </span>\
+                        </button>\
+                        <ul class="dropdown-menu">'
+        + writeSuggestionList +
+                        '</ul>\
+                    </div>\
+                    <input name="WriteSubscriptionWriteSeparators" class="span9" type="text" value="">\
+                </div>\
+            </td>\
+            <td class="span2">\
+                <div class="input-prepend">\
+                    <div class="btn-group">\
+                        <button class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1">\
+                            <span class="caret">\
+                            </span>\
+                        </button>\
+                        <ul class="dropdown-menu">'
+        + writeSuggestionList +
+                        '</ul>\
+                    </div>\
+                    <input name="WriteSubscriptionWriteSuffixs" class="span9" type="text" value="">\
+                </div>\
             </td>\
             <td class="span1">\
                 <a class="btn btn-red btn-deletesubscriptiontemp" href="#"><i class="icon-trash"></i></a>\
@@ -520,8 +566,8 @@
             $(this).closest("tr").remove();
         });
 
+        applyWriteSuggestion();
         applyMPEventPickerOnClick();
-
     });
 
     $(".btn-deletesubscription").click(function (event) {
@@ -542,18 +588,13 @@
         $("#ReadToValue").val($("#ReadToValue").val() + $(this).attr("data-readto"));
     });
 
-    $('.WritePrefixSuggestion').click(function (event) {
-        event.preventDefault();
-        $("#WritePrefixValue").val($("#WritePrefixValue").val() + $(this).attr("data-writeprefix"));
-    });
+    function applyWriteSuggestion() {
+        $('.WriteSuggestion').click(function (event) {
+            event.preventDefault();
+            var inputtext = $(this).closest(".input-prepend").find("input");
+            $(inputtext).val($(inputtext).val() + $(this).attr("data-suggestiontext"));
+        });
+    }
 
-    $('.WriteSeparatorSuggestion').click(function (event) {
-        event.preventDefault();
-        $("#WriteSeparatorValue").val($("#WriteSeparatorValue").val() + $(this).attr("data-writeseparator"));
-    });
-
-    $('.WriteAppendSuggestion').click(function (event) {
-        event.preventDefault();
-        $("#WriteAppendValue").val($("#WriteAppendValue").val() + $(this).attr("data-writeappend"));
-    });
+    applyWriteSuggestion();
 </script>

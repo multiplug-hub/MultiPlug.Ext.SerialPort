@@ -1,6 +1,7 @@
 ﻿using System.Runtime.Serialization;
 using MultiPlug.Base;
 using MultiPlug.Base.Exchange;
+using MultiPlug.Ext.SerialPort.Models.Exchange;
 
 namespace MultiPlug.Ext.SerialPort.Models.Components.SerialPort
 {
@@ -19,7 +20,7 @@ namespace MultiPlug.Ext.SerialPort.Models.Components.SerialPort
         public Event ReadEvent { get; set; }
 
         [DataMember]
-        public Subscription[] WriteSubscriptions { get; set; }
+        public WriteSubscription[] WriteSubscriptions { get; set; }
 
         [DataMember]
         public string PortName { get; set; }

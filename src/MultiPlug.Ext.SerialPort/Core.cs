@@ -8,6 +8,7 @@ using MultiPlug.Ext.SerialPort.Components.SerialPort;
 using MultiPlug.Ext.SerialPort.Models.Components.SerialPort;
 using MultiPlug.Base.Exchange.API;
 using MultiPlug.Extension.Core;
+using MultiPlug.Ext.SerialPort.Models.Exchange;
 
 namespace MultiPlug.Ext.SerialPort
 {
@@ -24,7 +25,7 @@ namespace MultiPlug.Ext.SerialPort
         [DataMember]
         public SerialPortComponent[] SerialPorts { get; set; } = new SerialPortComponent[0];
 
-        internal bool DeleteSubscription(string theSerialPortGuid, Subscription theSubscription)
+        internal bool DeleteSubscription(string theSerialPortGuid, WriteSubscription theSubscription)
         {
             var SerialPortsSearch = SerialPorts.FirstOrDefault(Lane => Lane.Guid == theSerialPortGuid);
 

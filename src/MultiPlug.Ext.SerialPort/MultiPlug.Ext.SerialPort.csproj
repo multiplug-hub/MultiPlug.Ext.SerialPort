@@ -69,6 +69,7 @@
     <Compile Include="Diagnostics\EventLogDefinitions.cs" />
     <Compile Include="Diagnostics\EventLogEntryCodes.cs" />
     <Compile Include="Models\Components\SerialPort\SerialPortProperties.cs" />
+    <Compile Include="Models\Exchange\WriteSubscription.cs" />
     <Compile Include="Models\Load\LoadRoot.cs" />
     <Compile Include="Models\Settings\About\AboutModel.cs" />
     <Compile Include="Models\Settings\Home\HomeModel.cs" />

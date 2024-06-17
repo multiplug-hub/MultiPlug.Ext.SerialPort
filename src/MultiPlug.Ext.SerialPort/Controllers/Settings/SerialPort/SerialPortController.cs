@@ -4,6 +4,7 @@ using MultiPlug.Base.Exchange;
 using MultiPlug.Base.Http;
 using MultiPlug.Ext.SerialPort.Models.Components.SerialPort;
 using MultiPlug.Ext.SerialPort.Models.Settings.SerialPort;
+using MultiPlug.Ext.SerialPort.Models.Exchange;
 
 namespace MultiPlug.Ext.SerialPort.Controllers.Settings.SerialPort
 {
@@ -54,6 +55,9 @@ namespace MultiPlug.Ext.SerialPort.Controllers.Settings.SerialPort
                         WriteAppend = SerialPortSearch.WriteAppend,
                         WriteSubscriptionGuids = SerialPortSearch.WriteSubscriptions.Select( x => x.Guid).ToArray(),
                         WriteSubscriptionIds = SerialPortSearch.WriteSubscriptions.Select(x => x.Id).ToArray(),
+                        WriteSubscriptionWritePrefixs = SerialPortSearch.WriteSubscriptions.Select(x => x.WritePrefix).ToArray(),
+                        WriteSubscriptionWriteSeparators = SerialPortSearch.WriteSubscriptions.Select(x => x.WriteSeparator).ToArray(),
+                        WriteSubscriptionWriteSuffixs = SerialPortSearch.WriteSubscriptions.Select(x => x.WriteAppend).ToArray(),
                         AvailablePortNames = Components.Utils.SerialPort.GetPortNames(),
                         AvailableBaudRates = Components.Utils.SerialPort.GetBaudRates(),
                         ReadRetryAfter = SerialPortSearch.ReadRetryAfter.Value
@@ -65,20 +69,27 @@ namespace MultiPlug.Ext.SerialPort.Controllers.Settings.SerialPort
 
         public Response Post(SerialPortModel theModel)
         {
-            Subscription[] Subscriptions;
+            WriteSubscription[] Subscriptions;
 
             if (theModel.WriteSubscriptionGuids != null)
             {
-                Subscriptions = new Subscription[theModel.WriteSubscriptionGuids.Length];
+                Subscriptions = new WriteSubscription[theModel.WriteSubscriptionGuids.Length];
 
                 for (int i = 0; i< theModel.WriteSubscriptionGuids.Length; i++)
                 {
-                    Subscriptions[i] = new Subscription { Guid = theModel.WriteSubscriptionGuids[i], Id = theModel.WriteSubscriptionIds[i] };
+                    Subscriptions[i] = new WriteSubscription
+                    {
+                        Guid = theModel.WriteSubscriptionGuids[i],
+                        Id = theModel.WriteSubscriptionIds[i],
+                        WritePrefix = theModel.WriteSubscriptionWritePrefixs[i],
+                        WriteSeparator = theModel.WriteSubscriptionWriteSeparators[i],
+                        WriteAppend = theModel.WriteSubscriptionWriteSuffixs[i]
+                    };
                 }
             }
             else
             {
-                Subscriptions = new Subscription[0];
+                Subscriptions = new WriteSubscription[0];
             }
 
             Core.Instance.Update(new SerialPortProperties[]

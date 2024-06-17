@@ -11,6 +11,7 @@ using MultiPlug.Ext.SerialPort.Diagnostics;
 using MultiPlug.Ext.SerialPort.Components.Utils;
 using MultiPlug.Ext.SerialPort.Models.Components.SerialPort;
 using DotNetSerialPort = System.IO.Ports.SerialPort;
+using MultiPlug.Ext.SerialPort.Models.Exchange;
 
 namespace MultiPlug.Ext.SerialPort.Components.SerialPort
 {
@@ -53,7 +54,7 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
             // m_SerialPort.DataReceived += new SerialDataReceivedEventHandler(OnDataReceived);
 
             ReadEvent = new Event { Guid = System.Guid.NewGuid().ToString(), Id = "SerialPortRead-" + System.Guid.NewGuid().ToString().Substring(0,7), Description = "Serial Port Read", Subjects = new string[] { "ReadValue" } };
-            WriteSubscriptions = new Subscription[0];
+            WriteSubscriptions = new WriteSubscription[0];
         }
 
         internal void UpdateProperties(SerialPortProperties theNewProperties)
@@ -204,9 +205,9 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
             return string.Join(Environment.NewLine, m_LoggingService.Read());
         }
 
-        internal bool DeleteWriteSubscription(Subscription theSubscription)
+        internal bool DeleteWriteSubscription(WriteSubscription theSubscription)
         {
-            var Subscriptions = new List<Subscription>(WriteSubscriptions);
+            var Subscriptions = new List<WriteSubscription>(WriteSubscriptions);
 
             var SubscriptionSearch = Subscriptions.FirstOrDefault(Sub => Sub.Guid == theSubscription.Guid);
 
@@ -221,11 +222,11 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
             return false;
         }
 
-        private bool UpdateWriteSubscriptions(Subscription[] theMachineReadySubscriptions)
+        private bool UpdateWriteSubscriptions(WriteSubscription[] theMachineReadySubscriptions)
         {
             bool Result = false;
 
-            var list = new List<Subscription>(WriteSubscriptions);
+            var list = new List<WriteSubscription>(WriteSubscriptions);
 
             foreach (var UpdatedSubscription in theMachineReadySubscriptions)
             {
@@ -234,7 +235,7 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
                     if (!string.IsNullOrEmpty(UpdatedSubscription.Id))
                     {
                         UpdatedSubscription.Guid = System.Guid.NewGuid().ToString();
-                        UpdatedSubscription.Event += OnSubscriptionEvent;
+                        UpdatedSubscription.WriteEvent += OnSubscriptionEvent;
                         list.Add(UpdatedSubscription);
                         Result = true;
                     }
@@ -247,14 +248,14 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
                     {
                         if (!string.IsNullOrEmpty(UpdatedSubscription.Id))
                         {
-                            UpdatedSubscription.Event += OnSubscriptionEvent;
+                            UpdatedSubscription.WriteEvent += OnSubscriptionEvent;
                             list.Add(UpdatedSubscription);
                             Result = true;
                         }
                     }
                     else
                     {
-                        if (Subscription.Merge(ExistingSubSearch, UpdatedSubscription)) { Result = true; }
+                        if (WriteSubscription.Merge(ExistingSubSearch, UpdatedSubscription)) { Result = true; }
                     }
                 }
             }
@@ -420,15 +421,22 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
             }
         }
 
-        private void OnSubscriptionEvent(SubscriptionEvent theSubscriptionEvent)
+        private void OnSubscriptionEvent(SubscriptionEvent theSubscriptionEvent, WriteSubscription theWriteSubscription)
         {
+            string WriteSeparator = string.IsNullOrEmpty(theWriteSubscription.WriteSeparatorUnescaped) ? m_WriteSeparator : theWriteSubscription.WriteSeparatorUnescaped;
+
             string[] AllSubjectValues = theSubscriptionEvent.PayloadSubjects.Select(item => item.Value).ToArray();
 
-            string WriteValue = string.Join(m_WriteSeparator, AllSubjectValues);
+            string WriteValue = string.Join(WriteSeparator, AllSubjectValues);
+
+            string WritePrefix = string.IsNullOrEmpty(theWriteSubscription.WritePrefixUnescaped) ? m_WritePrefix : theWriteSubscription.WritePrefixUnescaped;
+            string WriteAppend = string.IsNullOrEmpty(theWriteSubscription.WriteAppendUnescaped) ? m_WriteAppend : theWriteSubscription.WriteAppendUnescaped;
+
+            WriteValue = string.Concat(new string[]{ WritePrefix, WriteValue, WriteAppend});
 
             if (m_SerialPort.IsOpen)
             {
-                m_SerialPort.Write(m_WritePrefix + WriteValue + m_WriteAppend);
+                m_SerialPort.Write(WriteValue);
 
                 if (LoggingLevel == 1)
                 {
