@@ -59,6 +59,7 @@ namespace MultiPlug.Ext.SerialPort.Controllers.Settings.SerialPort
                         WriteSubscriptionWriteSeparators = SerialPortSearch.WriteSubscriptions.Select(x => x.WriteSeparator).ToArray(),
                         WriteSubscriptionWriteSuffixs = SerialPortSearch.WriteSubscriptions.Select(x => x.WriteAppend).ToArray(),
                         WriteSubscriptionIsHexs = SerialPortSearch.WriteSubscriptions.Select(x => x.IsHex.Value).ToArray(),
+                        WriteSubscriptionIgnoreDatas = SerialPortSearch.WriteSubscriptions.Select(x => x.IgnoreData.Value).ToArray(),
                         AvailablePortNames = Components.Utils.SerialPort.GetPortNames(),
                         AvailableBaudRates = Components.Utils.SerialPort.GetBaudRates(),
                         ReadRetryAfter = SerialPortSearch.ReadRetryAfter.Value
@@ -66,6 +67,29 @@ namespace MultiPlug.Ext.SerialPort.Controllers.Settings.SerialPort
                     Template = Templates.SettingsSerialPort
                 };
             }
+        }
+
+        private bool[] RemoveDuplicates( int theParentLength, bool[] theArrayWithDuplicates)
+        {
+            bool[] TheResult = new bool[theParentLength];
+
+            int index = 0;
+
+            for (int i = 0; i < theArrayWithDuplicates.Length; i++)
+            {
+                if ((i + 1) < theArrayWithDuplicates.Length && theArrayWithDuplicates[i + 1])
+                {
+                    TheResult[index] = true;
+                    i++;
+                }
+                else
+                {
+                    TheResult[index] = false;
+                }
+                index++;
+            }
+
+            return TheResult;
         }
 
         public Response Post(SerialPortModel theModel)
@@ -76,24 +100,8 @@ namespace MultiPlug.Ext.SerialPort.Controllers.Settings.SerialPort
             {
                 Subscriptions = new WriteSubscription[theModel.WriteSubscriptionGuids.Length];
 
-
-                bool[] IsHexs = new bool[theModel.WriteSubscriptionGuids.Length];
-
-                int index = 0;
-
-                for (int i = 0; i < theModel.WriteSubscriptionIsHexs.Length; i++)
-                {
-                    if((i + 1) < theModel.WriteSubscriptionIsHexs.Length && theModel.WriteSubscriptionIsHexs[i+1])
-                    {
-                        IsHexs[index] = true;
-                        i++;
-                    }
-                    else
-                    {
-                        IsHexs[index] = false;
-                    }
-                    index++;
-                }
+                bool[] IsHexs = RemoveDuplicates(theModel.WriteSubscriptionGuids.Length, theModel.WriteSubscriptionIsHexs);
+                bool[] IgnoreDatas = RemoveDuplicates(theModel.WriteSubscriptionGuids.Length, theModel.WriteSubscriptionIgnoreDatas);
 
                 for (int i = 0; i< theModel.WriteSubscriptionGuids.Length; i++)
                 {
@@ -104,7 +112,8 @@ namespace MultiPlug.Ext.SerialPort.Controllers.Settings.SerialPort
                         WritePrefix = theModel.WriteSubscriptionWritePrefixs[i],
                         WriteSeparator = theModel.WriteSubscriptionWriteSeparators[i],
                         WriteAppend = theModel.WriteSubscriptionWriteSuffixs[i],
-                        IsHex = IsHexs[i]
+                        IsHex = IsHexs[i],
+                        IgnoreData = IgnoreDatas[i]
                     };
                 }
             }

@@ -377,7 +377,8 @@
                             <table id="SubscriptionsTable" class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th class="span4">Subscription</th>
+                                        <th class="span3">Subscription</th>
+                                        <th class="span1">Ignore Data</th>
                                         <th class="span2">Prefix</th>
                                         <th class="span2">Separator</th>
                                         <th class="span2">Suffix</th>
@@ -389,9 +390,13 @@
                                     @for (int i = 0; i < Model.Extension.Model.WriteSubscriptionGuids.Length; i++)
                                     {
                                         <tr>
-                                            <td class="span4">
+                                            <td class="span3">
                                                 <input name="WriteSubscriptionGuids" type="hidden" value="@Model.Extension.Model.WriteSubscriptionGuids[i]">
                                                 <input name="WriteSubscriptionIds" class="input-block-level mp-event-picker" type="text" value="@Model.Extension.Model.WriteSubscriptionIds[i]">
+                                            </td>
+                                            <td class="span1">
+                                                <input type="hidden" name="WriteSubscriptionIgnoreDatas" value="false">
+                                                <input type="checkbox" name="WriteSubscriptionIgnoreDatas" value="true" @Raw(isChecked(Model.Extension.Model.WriteSubscriptionIgnoreDatas[i]))>
                                             </td>
                                             <td class="span2">
                                                 <div class="input-prepend">
@@ -461,6 +466,7 @@
                                     }
 
                                     <tr>
+                                        <th class="span3"></th>
                                         <th class="span1"></th>
                                         <th class="span2"></th>
                                         <th class="span2"></th>
@@ -512,9 +518,13 @@
 
     function NewSubscription() {
         return '<tr>\
-            <td class="span4">\
+            <td class="span3">\
                 <input name="WriteSubscriptionGuids" type="hidden" value="">\
                 <input name="WriteSubscriptionIds" class="input-block-level mp-event-picker" type="text" value="">\
+            </td>\
+            <td class="span1">\
+                <input type="hidden" name="WriteSubscriptionIgnoreDatas" value="false">\
+                <input type="checkbox" name="WriteSubscriptionIgnoreDatas" value="true">\
             </td>\
             <td class="span2">\
                 <div class="input-prepend">\

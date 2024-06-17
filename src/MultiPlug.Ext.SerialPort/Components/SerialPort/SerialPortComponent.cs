@@ -445,11 +445,14 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
 
         private void OnSubscriptionEvent(SubscriptionEvent theSubscriptionEvent, WriteSubscription theWriteSubscription)
         {
-            string WriteSeparator = string.IsNullOrEmpty(theWriteSubscription.WriteSeparatorUnescaped) ? m_WriteSeparator : theWriteSubscription.WriteSeparatorUnescaped;
+            string WriteValue = string.Empty;
 
-            string[] AllSubjectValues = theSubscriptionEvent.PayloadSubjects.Select(item => item.Value).ToArray();
-
-            string WriteValue = string.Join(WriteSeparator, AllSubjectValues);
+            if(theWriteSubscription.IgnoreData.Value == false)
+            {
+                string WriteSeparator = string.IsNullOrEmpty(theWriteSubscription.WriteSeparatorUnescaped) ? m_WriteSeparator : theWriteSubscription.WriteSeparatorUnescaped;
+                string[] AllSubjectValues = theSubscriptionEvent.PayloadSubjects.Select(item => item.Value).ToArray();
+                WriteValue = string.Join(WriteSeparator, AllSubjectValues);
+            }
 
             string WritePrefix = string.IsNullOrEmpty(theWriteSubscription.WritePrefixUnescaped) ? m_WritePrefix : theWriteSubscription.WritePrefixUnescaped;
             string WriteAppend = string.IsNullOrEmpty(theWriteSubscription.WriteAppendUnescaped) ? m_WriteAppend : theWriteSubscription.WriteAppendUnescaped;
