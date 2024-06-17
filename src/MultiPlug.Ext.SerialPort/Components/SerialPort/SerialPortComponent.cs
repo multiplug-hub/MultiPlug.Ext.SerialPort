@@ -459,7 +459,7 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
 
             WriteValue = string.Concat(new string[]{ WritePrefix, WriteValue, WriteAppend});
 
-            if (m_SerialPort.IsOpen)
+            if (m_SerialPort != null && m_SerialPort.IsOpen)
             {
                 if(theWriteSubscription.IsHex.Value)
                 {
