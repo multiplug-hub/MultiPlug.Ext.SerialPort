@@ -343,6 +343,20 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
 
                     Task ReadTask = Task.Run(() =>
                     {
+                        try
+                        {
+                            if (m_SerialPort.BytesToRead > 0 ) // Clear the buffer of any data at start - This maybe noise
+                            {
+                                m_SerialPort.DiscardInBuffer();
+                            }
+                        }
+                        catch(System.IO.IOException)
+                        {
+                        }
+                        catch (InvalidOperationException)
+                        {
+                        }
+
                         CancellationTokenSource ReadCancellationToken = m_ReadCancellationToken;
 
                         while ( !ReadCancellationToken.IsCancellationRequested )
@@ -355,7 +369,6 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
                             {
                                 break;
                             }
-
                         }
 
                         Close();
