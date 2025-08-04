@@ -370,9 +370,6 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
                                 break;
                             }
                         }
-
-                        Close();
-
                     }, m_ReadCancellationToken.Token);
                 }
             }
@@ -394,6 +391,8 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
 
                 if (m_SerialPort.IsOpen)
                 {
+                    m_ReadCancellationToken.Cancel();
+
                     try
                     {
                         m_SerialPort.Close();
@@ -426,8 +425,6 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
                     }
                 }
 
-
-                m_ReadCancellationToken.Cancel();
                 m_ReadCancellationToken = new CancellationTokenSource();
 
                 Opened = false;
