@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>MultiPlug.Ext.SerialPort</id>
-    <version>1.0.9</version>
+    <version>1.0.10</version>
     <title>Serial Port Extension for the MultiPlug .Net Edge Computing Platform</title>
     <authors>MultiPlugHub</authors>
     <owners>MultiPlugHub</owners>
@@ -12,7 +12,8 @@
     <description>Use Serial Ports with this MultiPlug Extension</description>
     <repository type="git" url="https://github.com/multiplug-hub/MultiPlug.Ext.SerialPort" />
 	<license type="expression">MIT</license>
-    <releaseNotes>1.0.9 https://github.com/multiplug-hub/MultiPlug.Ext.SerialPort/issues/16
+    <releaseNotes>1.0.10 https://github.com/multiplug-hub/MultiPlug.Ext.SerialPort/issues/17
+1.0.9 https://github.com/multiplug-hub/MultiPlug.Ext.SerialPort/issues/16
 https://github.com/multiplug-hub/MultiPlug.Ext.SerialPort/issues/15
 1.0.8 https://github.com/multiplug-hub/MultiPlug.Ext.SerialPort/issues/14
 1.0.7 https://github.com/multiplug-hub/MultiPlug.Ext.SerialPort/issues/13
