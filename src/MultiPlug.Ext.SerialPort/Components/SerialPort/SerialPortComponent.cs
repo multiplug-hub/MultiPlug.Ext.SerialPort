@@ -452,98 +452,113 @@ namespace MultiPlug.Ext.SerialPort.Components.SerialPort
             return buff;
         }
 
+        // https://github.com/multiplug-hub/MultiPlug.Ext.SerialPort/issues/17 You can subscribe to an event more than once
+        private object m_WriteLock = new object();
 
         private void OnSubscriptionEvent(SubscriptionEvent theSubscriptionEvent, WriteSubscription theWriteSubscription)
         {
-            string WriteValue = string.Empty;
-
-            if(theWriteSubscription.IgnoreData.Value == false)
+            lock (m_WriteLock)
             {
-                string WriteSeparator = string.IsNullOrEmpty(theWriteSubscription.WriteSeparatorUnescaped) ? m_WriteSeparator : theWriteSubscription.WriteSeparatorUnescaped;
-                string[] AllSubjectValues = theSubscriptionEvent.PayloadSubjects.Select(item => item.Value).ToArray();
-                WriteValue = string.Join(WriteSeparator, AllSubjectValues);
-            }
+                string WriteValue = string.Empty;
 
-            string WritePrefix = string.IsNullOrEmpty(theWriteSubscription.WritePrefixUnescaped) ? m_WritePrefix : theWriteSubscription.WritePrefixUnescaped;
-            string WriteAppend = string.IsNullOrEmpty(theWriteSubscription.WriteAppendUnescaped) ? m_WriteAppend : theWriteSubscription.WriteAppendUnescaped;
-
-            WriteValue = string.Concat(new string[]{ WritePrefix, WriteValue, WriteAppend});
-
-            if (m_SerialPort != null && m_SerialPort.IsOpen)
-            {
-                if(theWriteSubscription.IsHex.Value)
+                if (theWriteSubscription.IgnoreData.Value == false)
                 {
-                    byte[] StringAsByteArray = HexStringToBytes(WriteValue);
-                    try
-                    {
-                        m_SerialPort.Write(StringAsByteArray, 0, StringAsByteArray.Length);
-                    }
-                    catch(ArgumentNullException theException)
-                    {
-                        m_LoggingService.WriteEntry((uint)EventLogEntryCodes.Exception, new string[] { theException.Message });
-                        return;
-                    }
-                    catch (InvalidOperationException theException)
-                    {
-                        m_LoggingService.WriteEntry((uint)EventLogEntryCodes.Exception, new string[] { theException.Message });
-                        return;
-                    }
-                    catch (ArgumentOutOfRangeException theException)
-                    {
-                        m_LoggingService.WriteEntry((uint)EventLogEntryCodes.Exception, new string[] { theException.Message });
-                        return;
-                    }
-                    catch (ArgumentException theException)
-                    {
-                        m_LoggingService.WriteEntry((uint)EventLogEntryCodes.Exception, new string[] { theException.Message });
-                        return;
-                    }
-                    catch (System.ServiceProcess.TimeoutException theException)
-                    {
-                        m_LoggingService.WriteEntry((uint)EventLogEntryCodes.Exception, new string[] { theException.Message });
-                        return;
-                    }
-                }
-                else
-                {
-                    try
-                    {
-                        m_SerialPort.Write(WriteValue);
-                    }
-                    catch (ArgumentNullException theException)
-                    {
-                        m_LoggingService.WriteEntry((uint)EventLogEntryCodes.Exception, new string[] { theException.Message });
-                        return;
-                    }
-                    catch (InvalidOperationException theException)
-                    {
-                        m_LoggingService.WriteEntry((uint)EventLogEntryCodes.Exception, new string[] { theException.Message });
-                        return;
-                    }
-                    catch (ArgumentOutOfRangeException theException)
-                    {
-                        m_LoggingService.WriteEntry((uint)EventLogEntryCodes.Exception, new string[] { theException.Message });
-                        return;
-                    }
-                    catch (ArgumentException theException)
-                    {
-                        m_LoggingService.WriteEntry((uint)EventLogEntryCodes.Exception, new string[] { theException.Message });
-                        return;
-                    }
-                    catch (System.ServiceProcess.TimeoutException theException)
-                    {
-                        m_LoggingService.WriteEntry((uint)EventLogEntryCodes.Exception, new string[] { theException.Message });
-                        return;
-                    }
+                    string WriteSeparator = string.IsNullOrEmpty(theWriteSubscription.WriteSeparatorUnescaped) ? m_WriteSeparator : theWriteSubscription.WriteSeparatorUnescaped;
+                    string[] AllSubjectValues = theSubscriptionEvent.PayloadSubjects.Select(item => item.Value).ToArray();
+                    WriteValue = string.Join(WriteSeparator, AllSubjectValues);
                 }
 
-                if (LoggingLevel == 1)
+                string WritePrefix = string.IsNullOrEmpty(theWriteSubscription.WritePrefixUnescaped) ? m_WritePrefix : theWriteSubscription.WritePrefixUnescaped;
+                string WriteAppend = string.IsNullOrEmpty(theWriteSubscription.WriteAppendUnescaped) ? m_WriteAppend : theWriteSubscription.WriteAppendUnescaped;
+
+                WriteValue = string.Concat(new string[] { WritePrefix, WriteValue, WriteAppend });
+
+                if (m_SerialPort != null && m_SerialPort.IsOpen)
                 {
-                    m_LoggingService.WriteEntry((uint)EventLogEntryCodes.DataWrite, new string[] { string.Empty });
-                }
-                else if (LoggingLevel == 2)
-                {
-                    m_LoggingService.WriteEntry((uint)EventLogEntryCodes.DataWrite, new string[] { WriteValue });
+                    if (theWriteSubscription.IsHex.Value)
+                    {
+                        byte[] StringAsByteArray = HexStringToBytes(WriteValue);
+                        try
+                        {
+                            m_SerialPort.Write(StringAsByteArray, 0, StringAsByteArray.Length);
+                        }
+                        catch (ArgumentNullException theException)
+                        {
+                            m_LoggingService.WriteEntry((uint)EventLogEntryCodes.Exception, new string[] { theException.Message });
+                            return;
+                        }
+                        catch (InvalidOperationException theException)
+                        {
+                            m_LoggingService.WriteEntry((uint)EventLogEntryCodes.Exception, new string[] { theException.Message });
+                            return;
+                        }
+                        catch (ArgumentOutOfRangeException theException)
+                        {
+                            m_LoggingService.WriteEntry((uint)EventLogEntryCodes.Exception, new string[] { theException.Message });
+                            return;
+                        }
+                        catch (ArgumentException theException)
+                        {
+                            m_LoggingService.WriteEntry((uint)EventLogEntryCodes.Exception, new string[] { theException.Message });
+                            return;
+                        }
+                        catch (System.ServiceProcess.TimeoutException theException)
+                        {
+                            m_LoggingService.WriteEntry((uint)EventLogEntryCodes.Exception, new string[] { theException.Message });
+                            return;
+                        }
+                        catch (TimeoutException theException)
+                        {
+                            m_LoggingService.WriteEntry((uint)EventLogEntryCodes.Exception, new string[] { theException.Message });
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        try
+                        {
+                            m_SerialPort.Write(WriteValue);
+                        }
+                        catch (ArgumentNullException theException)
+                        {
+                            m_LoggingService.WriteEntry((uint)EventLogEntryCodes.Exception, new string[] { theException.Message });
+                            return;
+                        }
+                        catch (InvalidOperationException theException)
+                        {
+                            m_LoggingService.WriteEntry((uint)EventLogEntryCodes.Exception, new string[] { theException.Message });
+                            return;
+                        }
+                        catch (ArgumentOutOfRangeException theException)
+                        {
+                            m_LoggingService.WriteEntry((uint)EventLogEntryCodes.Exception, new string[] { theException.Message });
+                            return;
+                        }
+                        catch (ArgumentException theException)
+                        {
+                            m_LoggingService.WriteEntry((uint)EventLogEntryCodes.Exception, new string[] { theException.Message });
+                            return;
+                        }
+                        catch (System.ServiceProcess.TimeoutException theException)
+                        {
+                            m_LoggingService.WriteEntry((uint)EventLogEntryCodes.Exception, new string[] { theException.Message });
+                            return;
+                        }
+                        catch (TimeoutException theException)
+                        {
+                            m_LoggingService.WriteEntry((uint)EventLogEntryCodes.Exception, new string[] { theException.Message });
+                            return;
+                        }
+                    }
+
+                    if (LoggingLevel == 1)
+                    {
+                        m_LoggingService.WriteEntry((uint)EventLogEntryCodes.DataWrite, new string[] { string.Empty });
+                    }
+                    else if (LoggingLevel == 2)
+                    {
+                        m_LoggingService.WriteEntry((uint)EventLogEntryCodes.DataWrite, new string[] { WriteValue });
+                    }
                 }
             }
         }
